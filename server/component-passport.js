@@ -103,6 +103,17 @@ export default function setupPassport(app) {
 
   Object.keys(passportProviders).map(function(strategy) {
     var config = passportProviders[strategy];
+
+    // Skip OAuth providers whose credentials are not configured
+    const isOAuth2 = config.clientID !== undefined;
+    const isOAuth1 = config.consumerKey !== undefined;
+    if (isOAuth2 && (!config.clientID || !config.clientSecret)) {
+      return;
+    }
+    if (isOAuth1 && (!config.consumerKey || !config.consumerSecret)) {
+      return;
+    }
+
     config.session = config.session !== false;
     configurator.configureProvider(
       strategy,
