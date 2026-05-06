@@ -20,9 +20,12 @@ app.set('view engine', 'jade');
 app.use(loopback.token());
 app.disable('x-powered-by');
 
+var nodeEnv = process.env.NODE_ENV || 'development';
+console.log('booting LoopBack with NODE_ENV=' + nodeEnv);
+
 boot(app, {
   appRootDir: __dirname,
-  dev: process.env.NODE_ENV
+  env: nodeEnv
 });
 
 setupPassport(app);
