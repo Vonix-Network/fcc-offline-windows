@@ -105,12 +105,12 @@ export default function setupPassport(app) {
     var config = passportProviders[strategy];
 
     // Skip OAuth providers whose credentials are not configured
-    const isOAuth2 = config.clientID !== undefined;
-    const isOAuth1 = config.consumerKey !== undefined;
-    if (isOAuth2 && (!config.clientID || !config.clientSecret)) {
+    const needsOAuth2 = 'clientID' in config;
+    const needsOAuth1 = 'consumerKey' in config;
+    if (needsOAuth2 && (!config.clientID || !config.clientSecret)) {
       return;
     }
-    if (isOAuth1 && (!config.consumerKey || !config.consumerSecret)) {
+    if (needsOAuth1 && (!config.consumerKey || !config.consumerSecret)) {
       return;
     }
 
