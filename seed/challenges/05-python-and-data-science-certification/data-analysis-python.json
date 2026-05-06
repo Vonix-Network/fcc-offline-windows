@@ -1,0 +1,172 @@
+{
+  "name": "Data Analysis with Python",
+  "order": 2,
+  "time": "8 hours",
+  "helpRoom": "HelpPython",
+  "challenges": [
+    {
+      "id": "2026py002b001c0020001def1",
+      "title": "NumPy Arrays: The Foundation of Data Science",
+      "description": [
+        "NumPy is the foundational Python library for numerical computing, used by virtually every data science and AI framework. Its core type is the <code>ndarray</code> — an N-dimensional array optimized for vectorized operations.",
+        "<blockquote># NumPy basics\nimport numpy as np\n\narr = np.array([1, 2, 3, 4, 5])\narr * 2        # [2, 4, 6, 8, 10]  (vectorized!)\narr.mean()     # 3.0\narr.std()      # standard deviation\narr.sum()      # 15\narr.reshape(5, 1)  # column vector\nnp.zeros((3, 3))   # 3x3 matrix of zeros\nnp.linspace(0, 1, 5)  # [0, 0.25, 0.5, 0.75, 1.0]</blockquote>",
+        "NumPy's power comes from <strong>vectorized operations</strong> — instead of looping over elements, you apply operations to the entire array at once, which is dramatically faster.",
+        "NumPy is the backbone of pandas, scikit-learn, TensorFlow, and PyTorch. Understanding it is essential for AI/ML work.",
+        "<h4>Instructions</h4>",
+        "Implement a function <code>arrayStats</code> that takes an array of numbers and returns an object with four properties: <code>sum</code>, <code>mean</code>, <code>min</code>, and <code>max</code> (mirroring numpy's array statistics methods)."
+      ],
+      "challengeSeed": [
+        "// Simulate numpy array statistics in JavaScript",
+        "function arrayStats(arr) {",
+        "  // Calculate sum, mean, min, max",
+        "  return {",
+        "    sum: undefined,",
+        "    mean: undefined,",
+        "    min: undefined,",
+        "    max: undefined",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function arrayStats(arr) {\n  var sum = arr.reduce(function(a, b) { return a + b; }, 0);\n  return {\n    sum: sum,\n    mean: sum / arr.length,\n    min: Math.min.apply(null, arr),\n    max: Math.max.apply(null, arr)\n  };\n}"
+      ],
+      "tests": [
+        "var result = arrayStats([2, 4, 6, 8, 10]); assert(result.sum === 30, 'message: <code>sum</code> should equal 30 for [2,4,6,8,10].');",
+        "assert(result.mean === 6, 'message: <code>mean</code> should equal 6 for [2,4,6,8,10].');",
+        "assert(result.min === 2 && result.max === 10, 'message: <code>min</code> should be 2 and <code>max</code> should be 10.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py002b002c0020001def2",
+      "title": "Pandas DataFrames: Working with Tabular Data",
+      "description": [
+        "Pandas is Python's primary library for data manipulation and analysis. Its core structure is the <strong>DataFrame</strong> — a 2D table with labeled rows and columns, similar to a spreadsheet or SQL table.",
+        "<blockquote>import pandas as pd\n\ndf = pd.DataFrame({\n    'name': ['Alice', 'Bob', 'Charlie'],\n    'age': [25, 30, 35],\n    'salary': [70000, 85000, 95000]\n})\n\ndf['age'].mean()         # 30.0\ndf[df['age'] > 25]       # filter rows\ndf.sort_values('salary') # sort\ndf.groupby('dept').agg({'salary': 'mean'})  # group & aggregate</blockquote>",
+        "DataFrames are at the heart of data pipelines: loading CSVs, cleaning data, filtering records, joining tables, and preparing data for ML models.",
+        "The mental model maps directly to SQL: <code>df[df['age'] > 25]</code> is like <code>SELECT * WHERE age > 25</code>, and <code>groupby().agg()</code> is like <code>GROUP BY ... HAVING</code>.",
+        "<h4>Instructions</h4>",
+        "Implement a function <code>filterAndAverage</code> that takes an array of employee objects (each with <code>name</code>, <code>age</code>, <code>salary</code>), filters to only those with <code>age >= minAge</code>, and returns the average salary of the filtered group. Return <code>0</code> if no employees match."
+      ],
+      "challengeSeed": [
+        "// Simulates: df[df['age'] >= minAge]['salary'].mean()",
+        "function filterAndAverage(employees, minAge) {",
+        "  // 1. Filter employees where age >= minAge",
+        "  // 2. Return average salary of filtered employees",
+        "  // 3. Return 0 if no employees match",
+        "}"
+      ],
+      "solutions": [
+        "function filterAndAverage(employees, minAge) {\n  var filtered = employees.filter(function(e) { return e.age >= minAge; });\n  if (filtered.length === 0) return 0;\n  var total = filtered.reduce(function(sum, e) { return sum + e.salary; }, 0);\n  return total / filtered.length;\n}"
+      ],
+      "tests": [
+        "var emps = [{name:'A',age:25,salary:70000},{name:'B',age:30,salary:85000},{name:'C',age:35,salary:95000}]; assert(filterAndAverage(emps, 30) === 90000, 'message: Average salary of employees aged 30+ should be 90000.');",
+        "assert(filterAndAverage(emps, 40) === 0, 'message: Should return 0 when no employees match the filter.');",
+        "assert(filterAndAverage(emps, 20) === 83333.33333333333 || Math.abs(filterAndAverage(emps, 20) - 83333.33) < 1, 'message: Should return the average of all employees when minAge is 20.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py002b003c0020001def3",
+      "title": "Data Cleaning: Handling Missing Values",
+      "description": [
+        "Real-world datasets are messy. One of the most common tasks in data analysis is handling <strong>missing values</strong>. In Pandas, missing values are represented as <code>NaN</code> (Not a Number).",
+        "<blockquote>import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({'score': [85, np.nan, 92, np.nan, 78]})\n\ndf.isnull().sum()        # count missing values\ndf['score'].fillna(0)    # replace NaN with 0\ndf['score'].fillna(df['score'].mean())  # fill with mean\ndf.dropna()              # remove rows with NaN</blockquote>",
+        "Choosing how to handle missing data is an important analytical decision: <strong>dropping</strong> rows is safe but loses data; <strong>imputing</strong> (filling) with mean/median is common for continuous values; using <strong>forward fill</strong> is common for time series.",
+        "In 2026, ML pipelines use sophisticated imputation strategies — including model-based imputation where a secondary model predicts the missing values.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>cleanData</code> that takes an array of numbers (which may contain <code>null</code> or <code>undefined</code> values), and returns a new array where all null/undefined values are replaced with the <strong>mean</strong> of the non-null values. Round the mean to 2 decimal places."
+      ],
+      "challengeSeed": [
+        "// Simulates: df['col'].fillna(df['col'].mean())",
+        "function cleanData(data) {",
+        "  // 1. Find all non-null values",
+        "  // 2. Calculate their mean",
+        "  // 3. Return new array with nulls replaced by mean",
+        "}"
+      ],
+      "solutions": [
+        "function cleanData(data) {\n  var valid = data.filter(function(x) { return x !== null && x !== undefined; });\n  if (valid.length === 0) return data.map(function() { return 0; });\n  var mean = Math.round((valid.reduce(function(a, b) { return a + b; }, 0) / valid.length) * 100) / 100;\n  return data.map(function(x) { return (x === null || x === undefined) ? mean : x; });\n}"
+      ],
+      "tests": [
+        "var result = cleanData([1, null, 3, null, 5]); assert(result[1] === 3 && result[3] === 3, 'message: Null values should be replaced with the mean (3) of [1, 3, 5].');",
+        "assert(result[0] === 1 && result[2] === 3 && result[4] === 5, 'message: Non-null values should remain unchanged.');",
+        "var r2 = cleanData([10, 20, null]); assert(r2[2] === 15, 'message: Mean of [10, 20] is 15, so null should become 15.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py002b004c0020001def4",
+      "title": "GroupBy and Aggregation: Finding Patterns in Data",
+      "description": [
+        "One of the most powerful data analysis operations is <strong>grouping data</strong> and computing aggregates within each group — exactly like SQL's GROUP BY.",
+        "<blockquote>import pandas as pd\n\ndf = pd.DataFrame({\n    'dept': ['Eng', 'Eng', 'HR', 'HR', 'Eng'],\n    'salary': [90000, 95000, 65000, 70000, 100000]\n})\n\n# Group by department, get average salary\ndf.groupby('dept')['salary'].mean()\n# dept\n# Eng    95000.0\n# HR     67500.0</blockquote>",
+        "This pattern — group, then aggregate — is fundamental to exploratory data analysis (EDA). Common aggregations: <code>mean()</code>, <code>sum()</code>, <code>count()</code>, <code>min()</code>, <code>max()</code>, <code>std()</code>.",
+        "In JavaScript, you implement groupBy using <code>reduce()</code> to build a grouped object, then compute statistics per group.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>groupByAvg</code> that takes an array of objects and two strings: <code>groupKey</code> (the property to group by) and <code>valueKey</code> (the property to average). Return an object where each key is a group name and the value is the average of <code>valueKey</code> within that group."
+      ],
+      "challengeSeed": [
+        "// Simulates: df.groupby(groupKey)[valueKey].mean()",
+        "function groupByAvg(data, groupKey, valueKey) {",
+        "  // 1. Group records by groupKey",
+        "  // 2. For each group, calculate mean of valueKey",
+        "  // 3. Return { groupName: averageValue, ... }",
+        "}"
+      ],
+      "solutions": [
+        "function groupByAvg(data, groupKey, valueKey) {\n  var groups = {};\n  data.forEach(function(row) {\n    var key = row[groupKey];\n    if (!groups[key]) groups[key] = [];\n    groups[key].push(row[valueKey]);\n  });\n  var result = {};\n  Object.keys(groups).forEach(function(key) {\n    var vals = groups[key];\n    result[key] = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;\n  });\n  return result;\n}"
+      ],
+      "tests": [
+        "var data = [{dept:'Eng',salary:90000},{dept:'Eng',salary:95000},{dept:'HR',salary:65000},{dept:'HR',salary:70000}]; var result = groupByAvg(data, 'dept', 'salary'); assert(result['Eng'] === 92500, 'message: Average salary for Eng should be 92500.');",
+        "assert(result['HR'] === 67500, 'message: Average salary for HR should be 67500.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py002b005c0020001def5",
+      "title": "Data Normalization and Feature Scaling",
+      "description": [
+        "Before feeding data into machine learning models, you typically need to <strong>normalize</strong> or <strong>scale</strong> the features. This ensures no single feature dominates due to its scale.",
+        "Two common techniques:",
+        "<blockquote># Min-Max Normalization: scales to [0, 1]\nnormalized = (x - x.min()) / (x.max() - x.min())\n\n# Z-score Standardization: mean=0, std=1\nstandardized = (x - x.mean()) / x.std()</blockquote>",
+        "Example: If salary ranges from $30,000 to $150,000 and age from 20 to 65, a model without normalization would weight salary ~3,000x more than age just because of magnitude.",
+        "NumPy and scikit-learn provide <code>MinMaxScaler</code> and <code>StandardScaler</code> for this, but understanding the math behind them is essential.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>minMaxNormalize</code> that takes an array of numbers and returns a new array where each value is scaled to the range [0, 1] using min-max normalization. If all values are identical, return an array of zeros."
+      ],
+      "challengeSeed": [
+        "// Simulates sklearn MinMaxScaler\nfunction minMaxNormalize(arr) {",
+        "  var min = Math.min.apply(null, arr);",
+        "  var max = Math.max.apply(null, arr);",
+        "  // Handle edge case where max === min",
+        "  // Return normalized array",
+        "}"
+      ],
+      "solutions": [
+        "function minMaxNormalize(arr) {\n  var min = Math.min.apply(null, arr);\n  var max = Math.max.apply(null, arr);\n  if (max === min) return arr.map(function() { return 0; });\n  return arr.map(function(x) { return (x - min) / (max - min); });\n}"
+      ],
+      "tests": [
+        "var result = minMaxNormalize([0, 5, 10]); assert(result[0] === 0 && result[1] === 0.5 && result[2] === 1, 'message: [0, 5, 10] normalized should be [0, 0.5, 1].');",
+        "var r2 = minMaxNormalize([5, 5, 5]); assert(r2.every(function(x) { return x === 0; }), 'message: All-equal array should return all zeros.');",
+        "var r3 = minMaxNormalize([100, 200, 300, 400]); assert(r3[0] === 0 && r3[3] === 1, 'message: Min should map to 0 and max to 1.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

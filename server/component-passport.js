@@ -75,16 +75,17 @@ PassportConfigurator.prototype.init = function passportInit(noSession) {
       if (err || !user) {
         return done(err, user);
       }
-      return this.app.dataSources.db.connector
-        .collection('user')
-        .aggregate([
-          { $match: { _id: user.id } },
-          { $project: { points: { $size: '$progressTimestamps' } } }
-        ], function(err, [{ points = 1 } = {}]) {
-          if (err) { return done(err); }
-          user.points = points;
+      // ORM-agnostic points count (works with MongoDB and PostgreSQL)
+      this.userModel.findById(
+        id,
+        { fields: { progressTimestamps: true } },
+        (err2, tsUser) => {
+          user.points = (tsUser && tsUser.progressTimestamps)
+            ? tsUser.progressTimestamps.length
+            : 1;
           return done(null, user);
-        });
+        }
+      );
     });
   });
 };

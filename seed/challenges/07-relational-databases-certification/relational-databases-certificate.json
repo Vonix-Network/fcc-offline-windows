@@ -1,0 +1,58 @@
+{
+  "name": "Relational Databases Projects",
+  "order": 3,
+  "time": "20 hours",
+  "helpRoom": "HelpBackEnd",
+  "challenges": [
+    {
+      "id": "2026db004b001c0040001def1",
+      "title": "Build a World Cup Database CLI",
+      "description": [
+        "Build a command-line application that queries a relational database of World Cup match data.",
+        "User Story: The database contains tables for teams, tournaments, and match results with proper foreign keys.",
+        "User Story: I can query top scorers, tournament winners, win percentages, and head-to-head records.",
+        "User Story: I can insert new match results and the database correctly updates all derived statistics.",
+        "Bonus: Implement full-text search on team/player names using LIKE or trigram indexes.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026db004b002c0040001def2",
+      "title": "Build a Number Guessing Game Database",
+      "description": [
+        "Build a number guessing game that stores all game sessions and player statistics in a database.",
+        "User Story: The game remembers players by username across sessions.",
+        "User Story: Each game session stores the number of guesses and whether the player won.",
+        "User Story: On login, players see their best game (fewest guesses) and total games played.",
+        "User Story: A leaderboard query shows the top 10 players ranked by best guess count.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026db004b003c0040001def3",
+      "title": "Claim your Relational Databases Certification",
+      "description": [
+        "Congratulations on completing the Relational Databases certification!",
+        "You have learned SQL fundamentals, PostgreSQL features, schema design, indexes, transactions, and ACID guarantees."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "checkpoint",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

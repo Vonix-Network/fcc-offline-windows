@@ -1,0 +1,84 @@
+{
+  "name": "PostgreSQL and Database Design",
+  "order": 2,
+  "time": "8 hours",
+  "helpRoom": "HelpBackEnd",
+  "challenges": [
+    {
+      "id": "2026pg001b001c0010001def1",
+      "title": "Database Schema Design: Tables, Keys, and Constraints",
+      "description": [
+        "Good database design is the foundation of scalable applications. In PostgreSQL, you define <strong>schemas</strong> — the structure of your tables — using <code>CREATE TABLE</code> with typed columns and constraints.",
+        "<blockquote>-- PostgreSQL schema example\nCREATE TABLE users (\n  id        SERIAL PRIMARY KEY,        -- auto-increment integer\n  email     VARCHAR(255) UNIQUE NOT NULL,\n  name      VARCHAR(100) NOT NULL,\n  role      VARCHAR(50) DEFAULT 'user',\n  created_at TIMESTAMPTZ DEFAULT NOW()\n);\n\nCREATE TABLE posts (\n  id         SERIAL PRIMARY KEY,\n  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,\n  title      TEXT NOT NULL,\n  content    TEXT,\n  published  BOOLEAN DEFAULT false\n);\n\n-- Index for fast lookups\nCREATE INDEX idx_posts_user_id ON posts(user_id);\nCREATE INDEX idx_posts_published ON posts(published) WHERE published = true;</blockquote>",
+        "Key constraints: <code>PRIMARY KEY</code> (unique identifier), <code>FOREIGN KEY</code> (referential integrity), <code>UNIQUE</code> (no duplicates), <code>NOT NULL</code> (required field), <code>CHECK</code> (custom validation), <code>DEFAULT</code> (fallback value).",
+        "Indexes dramatically speed up queries but slow down writes — add them on columns you frequently filter, sort, or join on.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>validateSchema</code> that takes a table definition object <code>{ columns: [{name, type, required, unique}] }</code> and a data row object, and returns an array of validation error strings. Return an empty array if the row is valid."
+      ],
+      "challengeSeed": [
+        "function validateSchema(schema, row) {",
+        "  var errors = [];",
+        "  schema.columns.forEach(function(col) {",
+        "    // Check required constraint",
+        "    // Check type constraint (string/number/boolean)",
+        "    // Collect error messages for each violation",
+        "  });",
+        "  return errors;",
+        "}"
+      ],
+      "solutions": [
+        "function validateSchema(schema, row) {\n  var errors = [];\n  schema.columns.forEach(function(col) {\n    var val = row[col.name];\n    if (col.required && (val === null || val === undefined || val === '')) {\n      errors.push(col.name + ' is required');\n    } else if (val !== undefined && val !== null) {\n      if (col.type === 'number' && typeof val !== 'number') errors.push(col.name + ' must be a number');\n      if (col.type === 'string' && typeof val !== 'string') errors.push(col.name + ' must be a string');\n      if (col.type === 'boolean' && typeof val !== 'boolean') errors.push(col.name + ' must be a boolean');\n    }\n  });\n  return errors;\n}"
+      ],
+      "tests": [
+        "var schema = {columns:[{name:'email',type:'string',required:true},{name:'age',type:'number',required:false}]}; var r1 = validateSchema(schema, {email:'a@b.com',age:25}); assert(r1.length === 0, 'message: Valid row should return no errors.');",
+        "var r2 = validateSchema(schema, {age:25}); assert(r2.length === 1 && r2[0] === 'email is required', 'message: Missing required field should produce an error.');",
+        "var r3 = validateSchema(schema, {email:'a@b.com', age:'not a number'}); assert(r3.length === 1 && r3[0].includes('number'), 'message: Wrong type should produce a type error.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026pg001b002c0010001def2",
+      "title": "Transactions: ACID Guarantees",
+      "description": [
+        "Database <strong>transactions</strong> group multiple operations into a single atomic unit — either all operations succeed, or none do. This is the foundation of data integrity.",
+        "<blockquote>-- PostgreSQL transaction\nBEGIN;\n\nUPDATE accounts SET balance = balance - 500 WHERE id = 1;\nUPDATE accounts SET balance = balance + 500 WHERE id = 2;\n\n-- Both succeed\nCOMMIT;\n\n-- Or if something fails:\nROLLBACK; -- undo everything</blockquote>",
+        "Transactions guarantee <strong>ACID</strong> properties: <strong>A</strong>tomicity (all-or-nothing), <strong>C</strong>onsistency (valid state before and after), <strong>I</strong>solation (concurrent transactions don't interfere), <strong>D</strong>urability (committed data survives crashes).",
+        "In 2026, understanding transactions is critical for: payment processing, inventory management, multi-step user registration flows, and any operation where partial failure would corrupt data.",
+        "<h4>Instructions</h4>",
+        "Implement a simple <code>createTransaction</code> function that simulates database transaction behavior. It takes an initial <code>state</code> object and returns an object with <code>update(key, value)</code>, <code>commit()</code> (returns new state), and <code>rollback()</code> (discards changes, returns original state)."
+      ],
+      "challengeSeed": [
+        "function createTransaction(initialState) {",
+        "  var original = JSON.parse(JSON.stringify(initialState));",
+        "  var current = JSON.parse(JSON.stringify(initialState));",
+        "  return {",
+        "    update: function(key, value) {",
+        "      // Apply change to current (not original)",
+        "    },",
+        "    commit: function() {",
+        "      // Make current changes permanent, return new state",
+        "    },",
+        "    rollback: function() {",
+        "      // Discard changes, restore original",
+        "    }",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function createTransaction(initialState) {\n  var original = JSON.parse(JSON.stringify(initialState));\n  var current = JSON.parse(JSON.stringify(initialState));\n  return {\n    update: function(key, value) { current[key] = value; },\n    commit: function() { original = JSON.parse(JSON.stringify(current)); return current; },\n    rollback: function() { current = JSON.parse(JSON.stringify(original)); return original; }\n  };\n}"
+      ],
+      "tests": [
+        "var tx = createTransaction({balance: 1000}); tx.update('balance', 500); assert(tx.commit().balance === 500, 'message: commit() should persist the update.');",
+        "var tx2 = createTransaction({balance: 1000}); tx2.update('balance', 500); assert(tx2.rollback().balance === 1000, 'message: rollback() should restore original state.');",
+        "var tx3 = createTransaction({a:1}); tx3.update('a', 99); tx3.rollback(); tx3.update('a', 42); assert(tx3.commit().a === 42, 'message: Should be able to update after rollback.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

@@ -13,7 +13,22 @@ var onConnect = function() {
   if (timeoutHandler) {
     clearTimeout(timeoutHandler);
   }
-  app.start();
+
+  // Run autoupdate (safe schema migration — adds missing tables/columns,
+  // never drops existing data). Works for both PostgreSQL and MongoDB.
+  var ds = app.dataSources.db;
+  if (ds && typeof ds.autoupdate === 'function') {
+    ds.autoupdate(function(err) {
+      if (err) {
+        console.error('autoupdate failed (non-fatal):', err.message);
+      } else {
+        console.log('db schema up to date');
+      }
+      app.start();
+    });
+  } else {
+    app.start();
+  }
 };
 
 var timeoutHandler = setTimeout(function() {

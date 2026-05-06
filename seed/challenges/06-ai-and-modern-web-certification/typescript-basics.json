@@ -1,0 +1,184 @@
+{
+  "name": "TypeScript Basics",
+  "order": 1,
+  "time": "10 hours",
+  "helpRoom": "HelpJavaScript",
+  "challenges": [
+    {
+      "id": "2026ts001b001c0010001def1",
+      "title": "Introduction to TypeScript: Why Types Matter",
+      "description": [
+        "TypeScript is a <strong>strongly-typed superset of JavaScript</strong> developed by Microsoft. In 2026, TypeScript is the default choice for large-scale applications at companies like Microsoft, Google, Meta, Airbnb, and Stripe.",
+        "TypeScript adds <strong>static type checking</strong> — the ability to catch errors at compile-time (before running the code) rather than at runtime (when users encounter the bug).",
+        "<blockquote>// JavaScript - no type safety\nfunction add(a, b) { return a + b; }\nadd('5', 3);  // '53' - silent bug!\n\n// TypeScript - type safety\nfunction add(a: number, b: number): number { return a + b; }\nadd('5', 3);  // Error: Argument of type 'string' is not assignable to parameter of type 'number'</blockquote>",
+        "TypeScript compiles to plain JavaScript, so it runs anywhere JS runs. The <code>tsc</code> compiler (TypeScript Compiler) strips type annotations and produces JS.",
+        "In these challenges, you'll write JavaScript that <em>mimics</em> TypeScript patterns — validating types at runtime as TypeScript would at compile time.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>typeSafeAdd</code> that takes two parameters. If both are numbers, return their sum. If either is not a number, throw an Error with the message <code>'Both arguments must be numbers'</code>. This mirrors what TypeScript's type checker enforces at compile time."
+      ],
+      "challengeSeed": [
+        "// Mimics TypeScript: function add(a: number, b: number): number",
+        "function typeSafeAdd(a, b) {",
+        "  // Validate types (TypeScript does this at compile time)",
+        "  // Return sum if valid, throw Error if not",
+        "}"
+      ],
+      "solutions": [
+        "function typeSafeAdd(a, b) {\n  if (typeof a !== 'number' || typeof b !== 'number') {\n    throw new Error('Both arguments must be numbers');\n  }\n  return a + b;\n}"
+      ],
+      "tests": [
+        "assert(typeSafeAdd(2, 3) === 5, 'message: <code>typeSafeAdd(2, 3)</code> should return <code>5</code>.');",
+        "assert(typeSafeAdd(-1, 1) === 0, 'message: Should handle negative numbers.');",
+        "var threw = false; try { typeSafeAdd('5', 3); } catch(e) { threw = true; } assert(threw, 'message: Should throw when a string is passed.');",
+        "var msg = ''; try { typeSafeAdd(1, null); } catch(e) { msg = e.message; } assert(msg === 'Both arguments must be numbers', 'message: Error message should be \\'Both arguments must be numbers\\'.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ts001b002c0010001def2",
+      "title": "TypeScript Interfaces: Defining Object Shapes",
+      "description": [
+        "TypeScript <strong>interfaces</strong> define the shape of an object — what properties it must have and what their types are. They serve as a contract that objects must fulfill.",
+        "<blockquote>// TypeScript interface\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n  role?: string;  // optional property (the '?' means optional)\n}\n\nfunction greetUser(user: User): string {\n  return `Hello, ${user.name}!`;\n}\n\ngreetUser({ id: 1, name: 'Alice', email: 'alice@example.com' }); // OK\ngreetUser({ id: 1, name: 'Alice' }); // Error: missing 'email'</blockquote>",
+        "Interfaces can also define function signatures, array types, and can <strong>extend</strong> other interfaces (like class inheritance):",
+        "<blockquote>interface Admin extends User {\n  permissions: string[];\n}</blockquote>",
+        "In JavaScript, we validate interface compliance at runtime using type checking — useful for understanding how TypeScript's compile-time checks map to real logic.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>validateUser</code> that takes an object and returns <code>true</code> if it conforms to a User interface (must have: <code>id</code> as a number, <code>name</code> as a string, <code>email</code> as a string), and <code>false</code> otherwise. The <code>role</code> property is optional."
+      ],
+      "challengeSeed": [
+        "// Mimics TypeScript interface User { id: number; name: string; email: string; role?: string; }",
+        "function validateUser(obj) {",
+        "  // Check that obj has the correct properties with correct types",
+        "  // id must be a number, name must be a string, email must be a string",
+        "  // role is optional - if present, must be a string",
+        "}"
+      ],
+      "solutions": [
+        "function validateUser(obj) {\n  if (!obj) return false;\n  if (typeof obj.id !== 'number') return false;\n  if (typeof obj.name !== 'string') return false;\n  if (typeof obj.email !== 'string') return false;\n  if (obj.role !== undefined && typeof obj.role !== 'string') return false;\n  return true;\n}"
+      ],
+      "tests": [
+        "assert(validateUser({id: 1, name: 'Alice', email: 'a@b.com'}) === true, 'message: Valid user object should return true.');",
+        "assert(validateUser({id: 1, name: 'Alice', email: 'a@b.com', role: 'admin'}) === true, 'message: Valid user with optional role should return true.');",
+        "assert(validateUser({id: '1', name: 'Alice', email: 'a@b.com'}) === false, 'message: id as string should return false (TypeScript: number expected).');",
+        "assert(validateUser({name: 'Alice', email: 'a@b.com'}) === false, 'message: Missing required id should return false.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ts001b003c0010001def3",
+      "title": "TypeScript Generics: Writing Reusable Type-Safe Code",
+      "description": [
+        "TypeScript <strong>generics</strong> allow you to write functions and classes that work with any type while maintaining type safety. The type is parameterized using angle brackets <code>&lt;T&gt;</code>.",
+        "<blockquote>// TypeScript generic function\nfunction identity&lt;T&gt;(arg: T): T {\n  return arg;\n}\n\nidentity&lt;string&gt;('hello');  // returns 'hello', type: string\nidentity&lt;number&gt;(42);      // returns 42, type: number\n\n// Generic array function\nfunction firstItem&lt;T&gt;(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nfirstItem&lt;string&gt;(['a', 'b', 'c']);  // 'a', typed as string\nfirstItem&lt;number&gt;([1, 2, 3]);        // 1, typed as number</blockquote>",
+        "Generics are used everywhere in TypeScript's standard library: <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>, <code>Set&lt;T&gt;</code>.",
+        "In JavaScript, generics don't exist at runtime — but the equivalent pattern is writing functions that work regardless of type, which is how JavaScript has always worked.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>createStack</code> that returns a stack data structure (push, pop, peek, isEmpty) that works with any type of value. This mirrors a generic <code>Stack&lt;T&gt;</code> class in TypeScript."
+      ],
+      "challengeSeed": [
+        "// Mimics TypeScript: class Stack<T> { push(item: T): void; pop(): T; peek(): T; }",
+        "function createStack() {",
+        "  var items = [];",
+        "  return {",
+        "    push: function(item) { /* add to top */ },",
+        "    pop: function() { /* remove and return top item */ },",
+        "    peek: function() { /* return top item without removing */ },",
+        "    isEmpty: function() { /* return true if no items */ },",
+        "    size: function() { /* return number of items */ }",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function createStack() {\n  var items = [];\n  return {\n    push: function(item) { items.push(item); },\n    pop: function() { return items.pop(); },\n    peek: function() { return items[items.length - 1]; },\n    isEmpty: function() { return items.length === 0; },\n    size: function() { return items.length; }\n  };\n}"
+      ],
+      "tests": [
+        "var s = createStack(); assert(s.isEmpty() === true, 'message: New stack should be empty.');",
+        "s.push(1); s.push(2); assert(s.peek() === 2, 'message: peek() should return the top item.');",
+        "assert(s.size() === 2, 'message: size() should return 2 after two pushes.');",
+        "assert(s.pop() === 2 && s.size() === 1, 'message: pop() should remove and return the top item.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ts001b004c0010001def4",
+      "title": "TypeScript Union Types and Type Guards",
+      "description": [
+        "TypeScript <strong>union types</strong> allow a value to be one of several types, written with the <code>|</code> operator:",
+        "<blockquote>// Union type\ntype StringOrNumber = string | number;\n\nfunction format(value: string | number): string {\n  if (typeof value === 'string') {\n    return value.toUpperCase();   // TypeScript knows it's a string here\n  }\n  return value.toFixed(2);       // TypeScript knows it's a number here\n}\n\nformat('hello');  // 'HELLO'\nformat(3.14159); // '3.14'</blockquote>",
+        "The <code>if (typeof value === 'string')</code> check is called a <strong>type guard</strong> — it narrows the type within that block. TypeScript uses control flow analysis to track types through conditional branches.",
+        "Other type guards: <code>instanceof</code> checks, custom type guard functions with <code>value is Type</code> return types, and the <code>in</code> operator for checking property existence.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>formatValue</code> that accepts a parameter which can be a string, number, boolean, or array. Return: the string uppercased, the number formatted with 2 decimal places, the boolean as <code>'yes'</code> or <code>'no'</code>, and arrays as a comma-separated string."
+      ],
+      "challengeSeed": [
+        "// TypeScript: function formatValue(val: string | number | boolean | any[]): string",
+        "function formatValue(val) {",
+        "  // Use typeof and Array.isArray() as type guards",
+        "  // Handle: string, number, boolean, array",
+        "}"
+      ],
+      "solutions": [
+        "function formatValue(val) {\n  if (Array.isArray(val)) return val.join(', ');\n  if (typeof val === 'string') return val.toUpperCase();\n  if (typeof val === 'number') return val.toFixed(2);\n  if (typeof val === 'boolean') return val ? 'yes' : 'no';\n  return String(val);\n}"
+      ],
+      "tests": [
+        "assert(formatValue('hello') === 'HELLO', 'message: Strings should be uppercased.');",
+        "assert(formatValue(3.14159) === '3.14', 'message: Numbers should be formatted to 2 decimal places.');",
+        "assert(formatValue(true) === 'yes' && formatValue(false) === 'no', 'message: Booleans should return \\'yes\\' or \\'no\\'.');",
+        "assert(formatValue([1, 2, 3]) === '1, 2, 3', 'message: Arrays should be joined with \\', \\'.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ts001b005c0010001def5",
+      "title": "Async/Await and Promises in Modern JavaScript",
+      "description": [
+        "Modern JavaScript (ES2017+, which TypeScript builds on) uses <strong>async/await</strong> for handling asynchronous operations. This is essential for working with APIs, databases, and AI services in 2026.",
+        "<blockquote>// TypeScript async function\nasync function fetchUserData(userId: number): Promise&lt;User&gt; {\n  const response = await fetch(`/api/users/${userId}`);\n  if (!response.ok) {\n    throw new Error(`HTTP error: ${response.status}`);\n  }\n  const data: User = await response.json();\n  return data;\n}\n\n// Usage\ntry {\n  const user = await fetchUserData(42);\n  console.log(user.name);\n} catch (error) {\n  console.error('Failed to fetch user:', error);\n}</blockquote>",
+        "The <code>Promise&lt;T&gt;</code> generic type tells TypeScript what type the promise resolves to. <code>async</code> functions always return a Promise.",
+        "In 2026, async/await is used for: calling AI APIs (OpenAI, Claude, Gemini), fetching data from REST/GraphQL APIs, reading/writing files in Node.js, and database queries.",
+        "<h4>Instructions</h4>",
+        "Write an async function <code>delay</code> that takes a <code>ms</code> parameter and returns a Promise that resolves with the string <code>'done'</code> after <code>ms</code> milliseconds. Then write <code>runSequence</code> that awaits two <code>delay()</code> calls and returns an array of their results."
+      ],
+      "challengeSeed": [
+        "// TypeScript: function delay(ms: number): Promise<string>",
+        "function delay(ms) {",
+        "  return new Promise(function(resolve) {",
+        "    setTimeout(function() {",
+        "      resolve('done');",
+        "    }, ms);",
+        "  });",
+        "}",
+        "",
+        "// Write runSequence as async function using await",
+        "async function runSequence() {",
+        "  // await delay(1), then await delay(1), return both results as an array",
+        "}"
+      ],
+      "solutions": [
+        "function delay(ms) {\n  return new Promise(function(resolve) {\n    setTimeout(function() { resolve('done'); }, ms);\n  });\n}\nasync function runSequence() {\n  var r1 = await delay(1);\n  var r2 = await delay(1);\n  return [r1, r2];\n}"
+      ],
+      "tests": [
+        "assert(delay(1) instanceof Promise, 'message: <code>delay()</code> should return a Promise.');",
+        "delay(1).then(function(v) { assert(v === 'done', 'message: Promise should resolve with \\'done\\'.'); });",
+        "runSequence().then(function(arr) { assert(Array.isArray(arr) && arr.length === 2 && arr[0] === 'done' && arr[1] === 'done', 'message: <code>runSequence</code> should return an array of two \\'done\\' values.'); });"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "name": "Python Basics",
+  "order": 1,
+  "time": "10 hours",
+  "helpRoom": "HelpPython",
+  "challenges": [
+    {
+      "id": "2026py001b001c0010001def1",
+      "title": "Python vs JavaScript: Variables and Data Types",
+      "description": [
+        "Python is one of the world's most popular programming languages in 2026, powering AI systems, data pipelines, and web backends at companies like Google, OpenAI, and Netflix.",
+        "In Python, variables are declared without keywords — you simply assign a value: <code>name = 'Alice'</code>. Python infers the type automatically, just like JavaScript's <code>let</code> and <code>const</code>.",
+        "Python's core data types are: <code>str</code> (string), <code>int</code> (integer), <code>float</code> (decimal), <code>bool</code> (True/False), <code>None</code> (like JS's <code>null</code>), <code>list</code> (like JS array), <code>dict</code> (like JS object).",
+        "<blockquote># Python\nname = 'Alice'\nage = 30\nprice = 9.99\nis_active = True\nempty = None</blockquote>",
+        "Notice Python uses <code>True</code>/<code>False</code> with capital letters, and <code>None</code> instead of <code>null</code>.",
+        "<h4>Instructions</h4>",
+        "In JavaScript, create variables that mirror this Python snippet: a string called <code>name</code> with value <code>'Alice'</code>, a number <code>age</code> of <code>30</code>, a boolean <code>isActive</code> of <code>true</code>, and <code>empty</code> set to <code>null</code>."
+      ],
+      "challengeSeed": [
+        "// Python: name = 'Alice'  =>  JavaScript equivalent below",
+        "var name = undefined;",
+        "",
+        "// Python: age = 30",
+        "var age = undefined;",
+        "",
+        "// Python: is_active = True",
+        "var isActive = undefined;",
+        "",
+        "// Python: empty = None",
+        "var empty = undefined;"
+      ],
+      "solutions": [
+        "var name = 'Alice';\nvar age = 30;\nvar isActive = true;\nvar empty = null;"
+      ],
+      "tests": [
+        "assert(name === 'Alice', 'message: <code>name</code> should equal the string <code>\\'Alice\\'</code>.');",
+        "assert(age === 30, 'message: <code>age</code> should equal the number <code>30</code>.');",
+        "assert(isActive === true, 'message: <code>isActive</code> should be <code>true</code> (Python\\'s <code>True</code> equivalent).');",
+        "assert(empty === null, 'message: <code>empty</code> should be <code>null</code> (Python\\'s <code>None</code> equivalent).');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b002c0010001def2",
+      "title": "Python Lists and JavaScript Arrays",
+      "description": [
+        "Python <strong>lists</strong> are equivalent to JavaScript arrays. Both hold ordered collections of any type of data and are accessed by zero-based index.",
+        "<blockquote># Python list\nfruits = ['apple', 'banana', 'cherry']\nprint(fruits[0])  # 'apple'\nfruits.append('date')  # adds to end\nfruits.pop()      # removes from end\nlen(fruits)       # length: 3</blockquote>",
+        "The JavaScript equivalents are: <code>.push()</code> for append, <code>.pop()</code> for pop, and <code>.length</code> for len().",
+        "Python has a powerful feature called <strong>list slicing</strong>: <code>fruits[1:3]</code> returns items at index 1 and 2 (not 3). In JavaScript, this is <code>fruits.slice(1, 3)</code>.",
+        "Python also has <strong>list comprehensions</strong> — a concise way to create lists: <code>squares = [x**2 for x in range(5)]</code> creates <code>[0, 1, 4, 9, 16]</code>. The JS equivalent uses <code>.map()</code>.",
+        "<h4>Instructions</h4>",
+        "Given the array <code>nums</code> with values <code>[1, 2, 3, 4, 5]</code>, use JavaScript's array methods to: (1) push the number <code>6</code> onto it, (2) create a new array <code>squares</code> using <code>.map()</code> that contains the square of each number in <code>nums</code>."
+      ],
+      "challengeSeed": [
+        "var nums = [1, 2, 3, 4, 5];",
+        "",
+        "// Python: nums.append(6)",
+        "// Add 6 to nums here:",
+        "",
+        "",
+        "// Python: squares = [x**2 for x in nums]",
+        "// Create squares array using .map() here:",
+        "var squares;"
+      ],
+      "solutions": [
+        "var nums = [1, 2, 3, 4, 5];\nnums.push(6);\nvar squares = nums.map(function(x) { return x * x; });"
+      ],
+      "tests": [
+        "assert(nums[5] === 6, 'message: <code>nums</code> should have 6 as its last element after using <code>.push(6)</code>.');",
+        "assert(Array.isArray(squares), 'message: <code>squares</code> should be an array.');",
+        "assert(squares[0] === 1 && squares[1] === 4 && squares[2] === 9, 'message: <code>squares</code> should contain the squares of each element in <code>nums</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b003c0010001def3",
+      "title": "Python Dictionaries and JavaScript Objects",
+      "description": [
+        "Python <strong>dictionaries</strong> (dicts) are the equivalent of JavaScript objects — they store key-value pairs. In Python, keys can be strings, numbers, or tuples.",
+        "<blockquote># Python dictionary\nuser = {\n    'name': 'Alice',\n    'age': 30,\n    'skills': ['Python', 'SQL']\n}\nprint(user['name'])   # 'Alice'\nuser['city'] = 'NYC' # add new key\ndel user['age']       # delete key\n'name' in user        # True (key check)</blockquote>",
+        "In JavaScript: use <code>obj.key</code> or <code>obj['key']</code> for access, <code>delete obj.key</code> to remove, and <code>'key' in obj</code> to check existence.",
+        "Python's <code>dict.keys()</code>, <code>dict.values()</code>, and <code>dict.items()</code> correspond to JavaScript's <code>Object.keys()</code>, <code>Object.values()</code>, and <code>Object.entries()</code>.",
+        "<h4>Instructions</h4>",
+        "Create a JavaScript object called <code>user</code> with properties: <code>name</code> equal to <code>'Alice'</code>, <code>age</code> equal to <code>30</code>, and <code>skills</code> equal to the array <code>['Python', 'JavaScript']</code>. Then add a property <code>city</code> set to <code>'NYC'</code>."
+      ],
+      "challengeSeed": [
+        "// Python: user = {'name': 'Alice', 'age': 30, 'skills': ['Python', 'JavaScript']}",
+        "var user = {};",
+        "",
+        "// Python: user['city'] = 'NYC'",
+        "// Add city property here:"
+      ],
+      "solutions": [
+        "var user = {\n  name: 'Alice',\n  age: 30,\n  skills: ['Python', 'JavaScript']\n};\nuser.city = 'NYC';"
+      ],
+      "tests": [
+        "assert(user.name === 'Alice', 'message: <code>user.name</code> should equal <code>\\'Alice\\'</code>.');",
+        "assert(user.age === 30, 'message: <code>user.age</code> should equal <code>30</code>.');",
+        "assert(Array.isArray(user.skills), 'message: <code>user.skills</code> should be an array.');",
+        "assert(user.city === 'NYC', 'message: <code>user.city</code> should be added as <code>\\'NYC\\'</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b004c0010001def4",
+      "title": "Python Functions: def, *args, and Default Parameters",
+      "description": [
+        "Functions in Python are defined using the <code>def</code> keyword, followed by the function name and parameters:",
+        "<blockquote># Python function\ndef greet(name, greeting='Hello'):\n    return f\"{greeting}, {name}!\"\n\ngreet('Alice')          # 'Hello, Alice!'\ngreet('Bob', 'Hi')      # 'Hi, Bob!'</blockquote>",
+        "Python supports <strong>default parameters</strong> just like JavaScript (ES6+). Python's <strong>f-strings</strong> (<code>f\"text {var}\"</code>) are like JavaScript's template literals (<code>`text ${var}`</code>).",
+        "Python also supports <code>*args</code> (variable positional arguments) and <code>**kwargs</code> (variable keyword arguments):",
+        "<blockquote>def add_all(*args):\n    return sum(args)\n\nadd_all(1, 2, 3, 4)  # 10</blockquote>",
+        "The JavaScript equivalent uses the <strong>rest parameter</strong> <code>...args</code> and <code>args.reduce()</code> or a loop.",
+        "<h4>Instructions</h4>",
+        "Write a JavaScript function <code>greet</code> that takes <code>name</code> and an optional <code>greeting</code> parameter (default: <code>'Hello'</code>), and returns the string <code>'{greeting}, {name}!'</code>. Then write <code>addAll</code> using rest parameters that returns the sum of all arguments."
+      ],
+      "challengeSeed": [
+        "// Python: def greet(name, greeting='Hello'): return f\"{greeting}, {name}!\"",
+        "function greet(name, greeting) {",
+        "  // set default for greeting if not provided",
+        "",
+        "  // return the greeting string",
+        "}",
+        "",
+        "// Python: def add_all(*args): return sum(args)",
+        "function addAll(/* use rest params */) {",
+        "  // return sum of all arguments",
+        "}"
+      ],
+      "solutions": [
+        "function greet(name, greeting) {\n  greeting = greeting || 'Hello';\n  return greeting + ', ' + name + '!';\n}\nfunction addAll() {\n  var args = Array.prototype.slice.call(arguments);\n  return args.reduce(function(a, b) { return a + b; }, 0);\n}"
+      ],
+      "tests": [
+        "assert(greet('Alice') === 'Hello, Alice!', 'message: <code>greet(\\'Alice\\')</code> should return <code>\\'Hello, Alice!\\'</code>.');",
+        "assert(greet('Bob', 'Hi') === 'Hi, Bob!', 'message: <code>greet(\\'Bob\\', \\'Hi\\')</code> should return <code>\\'Hi, Bob!\\'</code>.');",
+        "assert(addAll(1, 2, 3, 4) === 10, 'message: <code>addAll(1, 2, 3, 4)</code> should return <code>10</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b005c0010001def5",
+      "title": "Python Loops: for, while, and Range",
+      "description": [
+        "Python's <code>for</code> loop iterates directly over iterables (like lists, strings, or ranges) — there are no C-style index loops by default:",
+        "<blockquote># Python loops\nfor fruit in ['apple', 'banana']:\n    print(fruit)\n\nfor i in range(5):   # 0, 1, 2, 3, 4\n    print(i)\n\nfor i in range(2, 10, 2):  # 2, 4, 6, 8 (start, stop, step)\n    print(i)</blockquote>",
+        "Python's <code>range(start, stop, step)</code> is like writing a classic <code>for (let i = start; i < stop; i += step)</code> loop in JavaScript.",
+        "Python's <code>enumerate()</code> gives both the index and value, similar to JavaScript's <code>forEach((item, index) => {})</code>:",
+        "<blockquote>for index, fruit in enumerate(['apple', 'banana']):\n    print(index, fruit)  # 0 apple, 1 banana</blockquote>",
+        "<h4>Instructions</h4>",
+        "Write a JavaScript function <code>sumRange</code> that takes <code>start</code>, <code>stop</code>, and <code>step</code> (like Python's range), and returns the sum of all numbers in that range. For example, <code>sumRange(2, 10, 2)</code> should return <code>2+4+6+8 = 20</code>."
+      ],
+      "challengeSeed": [
+        "// Python: sum(range(start, stop, step))",
+        "function sumRange(start, stop, step) {",
+        "  var total = 0;",
+        "  // use a for loop to iterate from start to stop by step",
+        "",
+        "  return total;",
+        "}"
+      ],
+      "solutions": [
+        "function sumRange(start, stop, step) {\n  var total = 0;\n  for (var i = start; i < stop; i += step) {\n    total += i;\n  }\n  return total;\n}"
+      ],
+      "tests": [
+        "assert(sumRange(0, 5, 1) === 10, 'message: <code>sumRange(0, 5, 1)</code> should return <code>10</code> (0+1+2+3+4).');",
+        "assert(sumRange(2, 10, 2) === 20, 'message: <code>sumRange(2, 10, 2)</code> should return <code>20</code> (2+4+6+8).');",
+        "assert(sumRange(0, 1, 1) === 0, 'message: <code>sumRange(0, 1, 1)</code> should return <code>0</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b006c0010001def6",
+      "title": "Python Classes and Object-Oriented Programming",
+      "description": [
+        "Python is a fully object-oriented language. Classes are defined with the <code>class</code> keyword. The <code>__init__</code> method is Python's constructor, and <code>self</code> is the equivalent of JavaScript's <code>this</code>:",
+        "<blockquote># Python class\nclass Animal:\n    def __init__(self, name, sound):\n        self.name = name\n        self.sound = sound\n\n    def speak(self):\n        return f\"{self.name} says {self.sound}!\"\n\ndog = Animal('Rex', 'Woof')\nprint(dog.speak())  # 'Rex says Woof!'</blockquote>",
+        "Python's <strong>inheritance</strong> is declared in the class definition: <code>class Dog(Animal):</code>. The child calls the parent constructor with <code>super().__init__()</code> — the same as JavaScript's <code>super()</code>.",
+        "Python also supports <strong>class methods</strong> (<code>@classmethod</code>), <strong>static methods</strong> (<code>@staticmethod</code>), and <strong>properties</strong> (<code>@property</code>) for encapsulation.",
+        "<h4>Instructions</h4>",
+        "Write a JavaScript ES5 constructor function <code>Animal</code> that takes <code>name</code> and <code>sound</code> parameters and sets them as properties. Add a <code>speak</code> method to its prototype that returns the string <code>'{name} says {sound}!'</code>."
+      ],
+      "challengeSeed": [
+        "// Python: class Animal with __init__ and speak method",
+        "function Animal(name, sound) {",
+        "  // set this.name and this.sound",
+        "}",
+        "",
+        "Animal.prototype.speak = function() {",
+        "  // return '{name} says {sound}!'",
+        "};"
+      ],
+      "solutions": [
+        "function Animal(name, sound) {\n  this.name = name;\n  this.sound = sound;\n}\nAnimal.prototype.speak = function() {\n  return this.name + ' says ' + this.sound + '!';\n};"
+      ],
+      "tests": [
+        "assert(new Animal('Rex', 'Woof').name === 'Rex', 'message: <code>new Animal(\\'Rex\\', \\'Woof\\').name</code> should equal <code>\\'Rex\\'</code>.');",
+        "assert(new Animal('Rex', 'Woof').sound === 'Woof', 'message: <code>.sound</code> should be set to the second argument.');",
+        "assert(new Animal('Rex', 'Woof').speak() === 'Rex says Woof!', 'message: <code>speak()</code> should return <code>\\'Rex says Woof!\\'</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b007c0010001def7",
+      "title": "Python Error Handling: try, except, finally",
+      "description": [
+        "Python uses <code>try</code>/<code>except</code>/<code>finally</code> for error handling, equivalent to JavaScript's <code>try</code>/<code>catch</code>/<code>finally</code>:",
+        "<blockquote># Python exception handling\ntry:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = None\n    print('Cannot divide by zero!')\nexcept ValueError as e:\n    print(f'Value error: {e}')\nfinally:\n    print('This always runs')</blockquote>",
+        "Python has a rich hierarchy of built-in exceptions: <code>TypeError</code>, <code>ValueError</code>, <code>KeyError</code>, <code>IndexError</code>, <code>ZeroDivisionError</code>, <code>FileNotFoundError</code>, and more.",
+        "You can raise exceptions manually with <code>raise ValueError('message')</code>, and create custom exceptions by subclassing <code>Exception</code>.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>safeDivide</code> that takes <code>a</code> and <code>b</code>. If <code>b</code> is zero, catch the error (or check explicitly) and return <code>null</code>. Otherwise return <code>a / b</code>. Use a <code>try/catch</code> block or an explicit check."
+      ],
+      "challengeSeed": [
+        "// Python: try/except ZeroDivisionError -> return None",
+        "function safeDivide(a, b) {",
+        "  try {",
+        "    // attempt division",
+        "",
+        "  } catch (e) {",
+        "    // handle division by zero",
+        "",
+        "  }",
+        "}"
+      ],
+      "solutions": [
+        "function safeDivide(a, b) {\n  try {\n    if (b === 0) throw new Error('Division by zero');\n    return a / b;\n  } catch (e) {\n    return null;\n  }\n}"
+      ],
+      "tests": [
+        "assert(safeDivide(10, 2) === 5, 'message: <code>safeDivide(10, 2)</code> should return <code>5</code>.');",
+        "assert(safeDivide(10, 0) === null, 'message: <code>safeDivide(10, 0)</code> should return <code>null</code> instead of throwing.');",
+        "assert(safeDivide(7, 2) === 3.5, 'message: <code>safeDivide(7, 2)</code> should return <code>3.5</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b008c0010001def8",
+      "title": "Python Functional Programming: map, filter, reduce",
+      "description": [
+        "Python supports functional programming with built-in <code>map()</code>, <code>filter()</code>, and <code>functools.reduce()</code> — the same as JavaScript's array methods.",
+        "<blockquote># Python functional tools\nnumbers = [1, 2, 3, 4, 5, 6]\n\n# map: transform each element\ndoubled = list(map(lambda x: x * 2, numbers))\n# [2, 4, 6, 8, 10, 12]\n\n# filter: keep matching elements\nevens = list(filter(lambda x: x % 2 == 0, numbers))\n# [2, 4, 6]\n\n# reduce: accumulate to single value\nfrom functools import reduce\ntotal = reduce(lambda acc, x: acc + x, numbers)\n# 21</blockquote>",
+        "Python's <strong>lambda</strong> functions (<code>lambda x: x * 2</code>) are equivalent to JavaScript's arrow functions (<code>x => x * 2</code>).",
+        "In 2026, Python's functional patterns are heavily used in data science pipelines: transforming datasets, filtering records, and aggregating results before feeding data into ML models.",
+        "<h4>Instructions</h4>",
+        "Given the array <code>numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code>, use <code>.map()</code>, <code>.filter()</code>, and <code>.reduce()</code> to: (1) create <code>tripled</code> — every number multiplied by 3, (2) create <code>odds</code> — only odd numbers, (3) calculate <code>total</code> — the sum of all numbers."
+      ],
+      "challengeSeed": [
+        "var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];",
+        "",
+        "// Python: list(map(lambda x: x * 3, numbers))",
+        "var tripled = numbers.map(/* your function */);",
+        "",
+        "// Python: list(filter(lambda x: x % 2 != 0, numbers))",
+        "var odds = numbers.filter(/* your function */);",
+        "",
+        "// Python: reduce(lambda acc, x: acc + x, numbers)",
+        "var total = numbers.reduce(/* your function */);"
+      ],
+      "solutions": [
+        "var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nvar tripled = numbers.map(function(x) { return x * 3; });\nvar odds = numbers.filter(function(x) { return x % 2 !== 0; });\nvar total = numbers.reduce(function(acc, x) { return acc + x; }, 0);"
+      ],
+      "tests": [
+        "assert(tripled[0] === 3 && tripled[9] === 30, 'message: <code>tripled</code> should contain each number multiplied by 3.');",
+        "assert(odds.length === 5 && odds[0] === 1 && odds[4] === 9, 'message: <code>odds</code> should contain only the odd numbers: [1, 3, 5, 7, 9].');",
+        "assert(total === 55, 'message: <code>total</code> should equal <code>55</code> (sum of 1 through 10).');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b009c0010001def9",
+      "title": "Python String Methods and f-Strings",
+      "description": [
+        "Python strings come with powerful built-in methods. Here are the most important ones, with JavaScript equivalents:",
+        "<blockquote># Python string methods\ns = '  Hello, World!  '\n\ns.strip()        # 'Hello, World!'  -> JS: .trim()\ns.lower()        # 'hello, world!' -> JS: .toLowerCase()\ns.upper()        # 'HELLO, WORLD!' -> JS: .toUpperCase()\ns.split(', ')    # ['Hello', 'World!'] -> JS: .split()\ns.replace('World', 'Python')  -> JS: .replace()\n'Hello' in s     # True -> JS: .includes()\ns.startswith('Hello')         -> JS: .startsWith()\ns.find('World')  # 7 -> JS: .indexOf()</blockquote>",
+        "Python's <strong>f-strings</strong> (formatted string literals) are the modern way to interpolate values: <code>f\"Hello, {name}! You are {age} years old.\"</code>. They support expressions: <code>f\"{2 + 2}\"</code> → <code>'4'</code>.",
+        "Python also has <code>.join()</code> for joining arrays into strings: <code>', '.join(['a', 'b', 'c'])</code> → <code>'a, b, c'</code>. This is the reverse of JavaScript's <code>['a', 'b', 'c'].join(', ')</code>.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>formatName</code> that takes a first name and last name (potentially with extra whitespace), trims them, capitalizes the first letter of each, and returns them as <code>'LastName, FirstName'</code>. For example, <code>formatName(' alice ', ' smith ')</code> returns <code>'Smith, Alice'</code>."
+      ],
+      "challengeSeed": [
+        "function formatName(firstName, lastName) {",
+        "  // 1. Trim whitespace from both names",
+        "  // 2. Capitalize first letter (hint: charAt(0).toUpperCase() + slice(1).toLowerCase())",
+        "  // 3. Return in 'LastName, FirstName' format",
+        "}"
+      ],
+      "solutions": [
+        "function formatName(firstName, lastName) {\n  var f = firstName.trim();\n  var l = lastName.trim();\n  f = f.charAt(0).toUpperCase() + f.slice(1).toLowerCase();\n  l = l.charAt(0).toUpperCase() + l.slice(1).toLowerCase();\n  return l + ', ' + f;\n}"
+      ],
+      "tests": [
+        "assert(formatName('alice', 'smith') === 'Smith, Alice', 'message: <code>formatName(\\'alice\\', \\'smith\\')</code> should return <code>\\'Smith, Alice\\'</code>.');",
+        "assert(formatName(' BOB ', ' JONES ') === 'Jones, Bob', 'message: Should trim whitespace and normalize capitalization.');",
+        "assert(formatName('charlie', 'BROWN') === 'Brown, Charlie', 'message: <code>formatName(\\'charlie\\', \\'BROWN\\')</code> should return <code>\\'Brown, Charlie\\'</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py001b010c0010001de10",
+      "title": "Python Generators and Iterators",
+      "description": [
+        "Python <strong>generators</strong> are functions that use <code>yield</code> instead of <code>return</code>. They produce values lazily — only computing the next value when asked. This is crucial for handling large datasets in data science without loading everything into memory.",
+        "<blockquote># Python generator\ndef fibonacci():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\nfib = fibonacci()\nnext(fib)  # 0\nnext(fib)  # 1\nnext(fib)  # 1\nnext(fib)  # 2</blockquote>",
+        "JavaScript has the exact same concept with <strong>generator functions</strong> using <code>function*</code> and <code>yield</code>. The <code>next()</code> Python built-in corresponds to calling <code>.next()</code> on a JS generator.",
+        "Generators are heavily used in Python data pipelines (e.g., iterating over millions of CSV rows without loading all into memory) and in JavaScript async workflows.",
+        "<h4>Instructions</h4>",
+        "Write a JavaScript generator function <code>counter</code> that yields numbers starting from <code>start</code>, incrementing by <code>step</code> each time, indefinitely. For example, a counter starting at 0 with step 5 should yield 0, 5, 10, 15, ..."
+      ],
+      "challengeSeed": [
+        "// Python equivalent: def counter(start, step): while True: yield start; start += step",
+        "function* counter(start, step) {",
+        "  // yield start, then keep incrementing by step",
+        "}"
+      ],
+      "solutions": [
+        "function* counter(start, step) {\n  while (true) {\n    yield start;\n    start += step;\n  }\n}"
+      ],
+      "tests": [
+        "var gen = counter(0, 5); assert(gen.next().value === 0, 'message: First <code>yield</code> should be <code>0</code>.');",
+        "var gen2 = counter(0, 5); gen2.next(); assert(gen2.next().value === 5, 'message: Second <code>yield</code> should be <code>5</code>.');",
+        "var gen3 = counter(10, 3); gen3.next(); gen3.next(); assert(gen3.next().value === 16, 'message: Third call on <code>counter(10, 3)</code> should yield <code>16</code>.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

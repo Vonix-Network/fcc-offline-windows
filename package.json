@@ -1,9 +1,10 @@
 {
-  "name": "freecodecamp",
-  "version": "0.1.0",
+  "name": "vonix-code-camp",
+  "version": "2.0.0",
+  "description": "Vonix Code Camp — An offline coding curriculum for May 2026. Python, TypeScript, React, AI/ML, SQL, and Information Security.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/freecodecamp/freecodecamp.git"
+    "url": "https://github.com/Vonix-Network/fcc-offline-windows.git"
   },
   "scripts": {
     "only-once": "npm run create-rev && echo '\n\nseeding database\n\n' && node seed && echo '\n\nSeeding Completed\n\n'",
@@ -84,6 +85,7 @@
     "loopback-boot": "^2.13.0",
     "loopback-component-passport": "^2.0.0",
     "loopback-connector-mongodb": "1.13.0",
+    "loopback-connector-postgresql": "^2.9.0",
     "merge-stream": "^1.0.0",
     "method-override": "^2.3.0",
     "moment": "^2.10.2",

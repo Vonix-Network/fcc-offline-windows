@@ -1,0 +1,153 @@
+{
+  "name": "AI Fundamentals and Prompt Engineering",
+  "order": 3,
+  "time": "8 hours",
+  "helpRoom": "HelpJavaScript",
+  "challenges": [
+    {
+      "id": "2026ai001b001c0010001def1",
+      "title": "How Large Language Models Work: Tokens and Embeddings",
+      "description": [
+        "In 2026, Large Language Models (LLMs) like GPT-4o, Claude 3.5, and Gemini 2.0 are the backbone of AI applications. Understanding how they work is essential for every developer.",
+        "LLMs process text as <strong>tokens</strong> — chunks of characters that are roughly 3-4 characters long on average. The word <code>'programming'</code> might be split into tokens like <code>['pro', 'gram', 'ming']</code>.",
+        "<blockquote>// Token counting approximation (like tiktoken)\nfunction estimateTokens(text) {\n  // Rough estimate: ~4 characters per token\n  return Math.ceil(text.length / 4);\n}\n\n// Common token limits (2026):\n// GPT-4o: 128,000 tokens context window\n// Claude 3.5 Sonnet: 200,000 tokens\n// Gemini 1.5 Pro: 1,000,000 tokens\n// Llama 3.1: 128,000 tokens (open source)</blockquote>",
+        "<strong>Embeddings</strong> are numerical representations of text (vectors of 1536+ numbers) that capture semantic meaning. Similar meanings produce similar vectors. They power semantic search, RAG (Retrieval-Augmented Generation), and recommendation systems.",
+        "<h4>Instructions</h4>",
+        "Implement a simplified <code>cosineSimilarity</code> function that takes two arrays (vectors) of equal length and returns their cosine similarity — a number from -1 to 1 where 1 = identical direction. This is used to find which text embeddings are most similar to a query embedding in a vector database."
+      ],
+      "challengeSeed": [
+        "// Cosine similarity: the core operation in embedding search",
+        "// Used by vector DBs like Pinecone, Weaviate, pgvector",
+        "function cosineSimilarity(vecA, vecB) {",
+        "  // dot product / (magnitude of A * magnitude of B)",
+        "  var dotProduct = 0;",
+        "  var magA = 0;",
+        "  var magB = 0;",
+        "  for (var i = 0; i < vecA.length; i++) {",
+        "    // accumulate dotProduct, magA, magB",
+        "  }",
+        "  // return dot / (sqrt(magA) * sqrt(magB))",
+        "}"
+      ],
+      "solutions": [
+        "function cosineSimilarity(vecA, vecB) {\n  var dotProduct = 0, magA = 0, magB = 0;\n  for (var i = 0; i < vecA.length; i++) {\n    dotProduct += vecA[i] * vecB[i];\n    magA += vecA[i] * vecA[i];\n    magB += vecB[i] * vecB[i];\n  }\n  return dotProduct / (Math.sqrt(magA) * Math.sqrt(magB));\n}"
+      ],
+      "tests": [
+        "var sim = cosineSimilarity([1,0,0],[1,0,0]); assert(Math.abs(sim - 1) < 0.0001, 'message: Identical vectors should have cosine similarity of 1.');",
+        "var sim2 = cosineSimilarity([1,0],[0,1]); assert(Math.abs(sim2) < 0.0001, 'message: Perpendicular vectors should have cosine similarity of ~0.');",
+        "var sim3 = cosineSimilarity([1,2,3],[2,4,6]); assert(Math.abs(sim3 - 1) < 0.0001, 'message: Parallel vectors (same direction) should have similarity of 1.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ai001b002c0010001def2",
+      "title": "Prompt Engineering: Writing Effective AI Prompts",
+      "description": [
+        "<strong>Prompt engineering</strong> is the practice of crafting inputs to AI models to get better, more reliable outputs. In 2026, it's a core skill for developers building on top of LLMs.",
+        "<strong>Key prompt techniques:</strong>",
+        "<blockquote>// 1. Zero-shot: Direct instruction\n'Summarize this text in one sentence: [text]'\n\n// 2. Few-shot: Examples before the task\n'Classify sentiment (positive/negative):\nText: \"I love this!\" -> positive\nText: \"This is terrible\" -> negative\nText: \"[your text]\" ->'\n\n// 3. Chain-of-Thought (CoT)\n'Solve this step by step: [problem]'\n\n// 4. System prompt: Sets model behavior\n{ role: 'system', content: 'You are a helpful coding assistant. Always provide TypeScript examples.' }\n\n// 5. Structured output\n'Return a JSON object with fields: name, age, skills[]'</blockquote>",
+        "Best practices for 2026: Be specific and explicit, provide context and constraints, use structured formats (JSON) for programmatic outputs, iterate and test prompts systematically.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>buildPrompt</code> that takes a <code>template</code> string with placeholders like <code>{{variable}}</code> and a <code>values</code> object, and returns the template with all placeholders replaced by their corresponding values. This simulates prompt templating used in LangChain, LlamaIndex, and similar frameworks."
+      ],
+      "challengeSeed": [
+        "// Prompt templating - used in LangChain, PromptLayer, etc.",
+        "// '{{name}} is {{age}} years old' + {name: 'Alice', age: 30} -> 'Alice is 30 years old'",
+        "function buildPrompt(template, values) {",
+        "  // Replace all {{key}} occurrences with values[key]",
+        "}"
+      ],
+      "solutions": [
+        "function buildPrompt(template, values) {\n  return template.replace(/\\{\\{(\\w+)\\}\\}/g, function(match, key) {\n    return values[key] !== undefined ? values[key] : match;\n  });\n}"
+      ],
+      "tests": [
+        "assert(buildPrompt('Hello, {{name}}!', {name: 'Alice'}) === 'Hello, Alice!', 'message: Should replace {{name}} with Alice.');",
+        "assert(buildPrompt('{{a}} + {{b}} = {{c}}', {a: 1, b: 2, c: 3}) === '1 + 2 = 3', 'message: Should replace multiple placeholders.');",
+        "assert(buildPrompt('Hi {{name}}, you are {{age}}.', {name: 'Bob', age: 25}) === 'Hi Bob, you are 25.', 'message: Should work with number values.');",
+        "assert(buildPrompt('{{missing}} value', {}) === '{{missing}} value', 'message: Should leave unresolved placeholders intact.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ai001b003c0010001def3",
+      "title": "RAG: Retrieval-Augmented Generation",
+      "description": [
+        "<strong>RAG (Retrieval-Augmented Generation)</strong> is the dominant architecture for AI apps in 2026. Instead of relying solely on a model's training data, RAG retrieves relevant documents from your own data store and injects them into the prompt.",
+        "<blockquote>// RAG Pipeline (conceptual)\nasync function ragQuery(userQuestion: string): Promise&lt;string&gt; {\n  // 1. Embed the user's question\n  const queryEmbedding = await embedText(userQuestion);\n\n  // 2. Find the most similar chunks in your vector DB\n  const relevantChunks = await vectorDB.search(queryEmbedding, topK=5);\n\n  // 3. Build a context-rich prompt\n  const context = relevantChunks.map(c =&gt; c.text).join('\\n---\\n');\n  const prompt = `Answer based on context:\\n${context}\\nQuestion: ${userQuestion}`;\n\n  // 4. Generate answer with LLM\n  return await llm.complete(prompt);\n}</blockquote>",
+        "RAG is used for: company knowledge bases, document Q&A, code search, customer support bots, and medical reference systems. The key challenge is <strong>chunking strategy</strong> — how to split documents into meaningful pieces.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>chunkText</code> that splits a long text string into overlapping chunks for RAG indexing. It should take <code>text</code>, <code>chunkSize</code> (max characters per chunk), and <code>overlap</code> (characters shared between adjacent chunks). Return an array of chunk strings."
+      ],
+      "challengeSeed": [
+        "// Text chunking for RAG pipelines",
+        "// Used before embedding text into a vector database",
+        "function chunkText(text, chunkSize, overlap) {",
+        "  var chunks = [];",
+        "  var step = chunkSize - overlap;",
+        "  // Create chunks from position 0, step, 2*step, etc.",
+        "  // Each chunk is text.slice(start, start + chunkSize)",
+        "  return chunks;",
+        "}"
+      ],
+      "solutions": [
+        "function chunkText(text, chunkSize, overlap) {\n  var chunks = [];\n  var step = chunkSize - overlap;\n  for (var i = 0; i < text.length; i += step) {\n    chunks.push(text.slice(i, i + chunkSize));\n    if (i + chunkSize >= text.length) break;\n  }\n  return chunks;\n}"
+      ],
+      "tests": [
+        "var chunks = chunkText('abcdefghij', 4, 0); assert(chunks.length >= 2 && chunks[0] === 'abcd', 'message: First chunk should be \\'abcd\\' with no overlap.');",
+        "var c2 = chunkText('abcdefghij', 4, 2); assert(c2[0] === 'abcd' && c2[1] === 'cdef', 'message: With overlap=2, second chunk should start 2 chars into first chunk.');",
+        "var c3 = chunkText('hello', 10, 0); assert(c3.length === 1 && c3[0] === 'hello', 'message: Text shorter than chunkSize should produce one chunk.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ai001b004c0010001def4",
+      "title": "AI Agent Patterns: Tools and Function Calling",
+      "description": [
+        "<strong>AI Agents</strong> are LLM-powered programs that can use tools — web search, code execution, APIs, database queries — to complete complex multi-step tasks. In 2026, agent frameworks like LangGraph, AutoGen, and CrewAI are standard in production.",
+        "<blockquote>// OpenAI Function Calling format (used by all major LLMs)\nconst tools = [\n  {\n    type: 'function',\n    function: {\n      name: 'get_weather',\n      description: 'Get current weather for a city',\n      parameters: {\n        type: 'object',\n        properties: {\n          city: { type: 'string', description: 'City name' },\n          units: { type: 'string', enum: ['celsius', 'fahrenheit'] }\n        },\n        required: ['city']\n      }\n    }\n  }\n];\n\n// The model decides WHEN to call the tool and WITH WHAT arguments\n// Your code then executes it and feeds results back to the model</blockquote>",
+        "The agent loop: LLM receives task → decides to call a tool → your code runs the tool → results fed back to LLM → LLM continues reasoning → repeat until task complete.",
+        "<h4>Instructions</h4>",
+        "Implement a simple <code>ToolRegistry</code> that stores tools (name → function mapping) and a <code>dispatch</code> method that looks up and calls a tool by name with given arguments. Return <code>null</code> if the tool doesn't exist."
+      ],
+      "challengeSeed": [
+        "// Simulates the tool dispatcher in an AI agent framework",
+        "function createToolRegistry() {",
+        "  var tools = {};",
+        "  return {",
+        "    register: function(name, fn) {",
+        "      // Store fn under name",
+        "    },",
+        "    dispatch: function(name, args) {",
+        "      // Look up tool by name, call with args, return result",
+        "      // Return null if tool not found",
+        "    },",
+        "    list: function() {",
+        "      // Return array of registered tool names",
+        "    }",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function createToolRegistry() {\n  var tools = {};\n  return {\n    register: function(name, fn) { tools[name] = fn; },\n    dispatch: function(name, args) {\n      if (!tools[name]) return null;\n      return tools[name](args);\n    },\n    list: function() { return Object.keys(tools); }\n  };\n}"
+      ],
+      "tests": [
+        "var registry = createToolRegistry(); registry.register('add', function(a) { return a.x + a.y; }); assert(registry.dispatch('add', {x: 3, y: 4}) === 7, 'message: dispatch should call registered tool with args.');",
+        "assert(registry.dispatch('nonexistent', {}) === null, 'message: dispatch should return null for unknown tools.');",
+        "registry.register('greet', function(a) { return 'Hello ' + a.name; }); assert(registry.list().length === 2, 'message: list() should return all registered tool names.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

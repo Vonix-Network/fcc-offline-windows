@@ -13,6 +13,9 @@
           "unique": true,
           "background": true,
           "sparse": true
+        },
+        "postgresql": {
+          "unique": true
         }
       }
     },
@@ -60,6 +63,9 @@
         "mongodb": {
           "unique": true,
           "background": true
+        },
+        "postgresql": {
+          "unique": true
         }
       }
     },

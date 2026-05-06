@@ -1,0 +1,118 @@
+{
+  "name": "Scientific Computing",
+  "order": 3,
+  "time": "6 hours",
+  "helpRoom": "HelpPython",
+  "challenges": [
+    {
+      "id": "2026py003b001c0030001def1",
+      "title": "Recursion and Dynamic Programming",
+      "description": [
+        "Scientific computing often requires solving complex optimization problems using <strong>recursion</strong> and <strong>dynamic programming (DP)</strong>. Python excels at expressing these algorithms cleanly.",
+        "<blockquote># Python: Fibonacci with memoization\nfrom functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nfib(50)  # extremely fast vs naive recursion</blockquote>",
+        "Python's <code>@lru_cache</code> decorator automatically memoizes function results — the equivalent of manually building a cache dictionary. In JavaScript, you implement this with a <code>memo</code> object.",
+        "Dynamic programming breaks problems into overlapping subproblems and stores results to avoid redundant computation — essential for computational biology (sequence alignment), ML (Viterbi algorithm), and optimization.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>fibonacci</code> that returns the nth Fibonacci number. It MUST use memoization (a <code>memo</code> object or closure) so that repeated calls are O(1). <code>fibonacci(0) = 0</code>, <code>fibonacci(1) = 1</code>."
+      ],
+      "challengeSeed": [
+        "// Implement memoized Fibonacci (like Python's @lru_cache)",
+        "var memo = {};",
+        "function fibonacci(n) {",
+        "  // Check memo first",
+        "  // Base cases: n <= 1",
+        "  // Recursive case with memoization",
+        "}"
+      ],
+      "solutions": [
+        "var memo = {};\nfunction fibonacci(n) {\n  if (n in memo) return memo[n];\n  if (n <= 1) return n;\n  memo[n] = fibonacci(n - 1) + fibonacci(n - 2);\n  return memo[n];\n}"
+      ],
+      "tests": [
+        "assert(fibonacci(0) === 0, 'message: <code>fibonacci(0)</code> should return 0.');",
+        "assert(fibonacci(1) === 1 && fibonacci(2) === 1, 'message: <code>fibonacci(1)</code> and <code>fibonacci(2)</code> should both return 1.');",
+        "assert(fibonacci(10) === 55, 'message: <code>fibonacci(10)</code> should return 55.');",
+        "assert(fibonacci(30) === 832040, 'message: <code>fibonacci(30)</code> should return 832040 efficiently.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py003b002c0030001def2",
+      "title": "Sorting Algorithms: Performance in Data Pipelines",
+      "description": [
+        "Efficient sorting is fundamental to data science — from ranking search results to sorting data before binary search or merge operations. Python's built-in <code>sorted()</code> and <code>.sort()</code> use <strong>Timsort</strong> (O(n log n) worst case), a hybrid of merge sort and insertion sort.",
+        "<blockquote># Python sorting\ndata = [64, 34, 25, 12, 22, 11, 90]\nsorted(data)               # returns new sorted list\ndata.sort()                # in-place sort\nsorted(data, reverse=True) # descending\n\n# Sort objects by key\npeople = [{'name': 'Bob', 'age': 30}, {'name': 'Alice', 'age': 25}]\nsorted(people, key=lambda p: p['age'])\n# [{'name': 'Alice', 'age': 25}, ...]</blockquote>",
+        "Understanding sort performance matters at scale: sorting 1 million records with O(n²) bubble sort takes ~1 trillion operations vs ~20 million with O(n log n).",
+        "<h4>Instructions</h4>",
+        "Implement <strong>merge sort</strong> in JavaScript. Merge sort is a divide-and-conquer algorithm: split the array in half, recursively sort each half, then merge the sorted halves. It runs in O(n log n) time."
+      ],
+      "challengeSeed": [
+        "function mergeSort(arr) {",
+        "  if (arr.length <= 1) return arr;",
+        "  var mid = Math.floor(arr.length / 2);",
+        "  var left = mergeSort(arr.slice(0, mid));",
+        "  var right = mergeSort(arr.slice(mid));",
+        "  return merge(left, right);",
+        "}",
+        "",
+        "function merge(left, right) {",
+        "  var result = [];",
+        "  // Merge two sorted arrays into one sorted array",
+        "  return result;",
+        "}"
+      ],
+      "solutions": [
+        "function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  var mid = Math.floor(arr.length / 2);\n  var left = mergeSort(arr.slice(0, mid));\n  var right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\nfunction merge(left, right) {\n  var result = [];\n  var i = 0, j = 0;\n  while (i < left.length && j < right.length) {\n    if (left[i] <= right[j]) result.push(left[i++]);\n    else result.push(right[j++]);\n  }\n  return result.concat(left.slice(i)).concat(right.slice(j));\n}"
+      ],
+      "tests": [
+        "assert(JSON.stringify(mergeSort([3,1,2])) === '[1,2,3]', 'message: <code>mergeSort([3,1,2])</code> should return <code>[1,2,3]</code>.');",
+        "assert(JSON.stringify(mergeSort([64,34,25,12,22,11,90])) === '[11,12,22,25,34,64,90]', 'message: Should correctly sort a longer array.');",
+        "assert(JSON.stringify(mergeSort([])) === '[]', 'message: Should handle empty array.');",
+        "assert(JSON.stringify(mergeSort([1])) === '[1]', 'message: Should handle single-element array.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py003b003c0030001def3",
+      "title": "Binary Search and Efficient Lookups",
+      "description": [
+        "<strong>Binary search</strong> is one of the most important algorithms in computer science. It finds a target in a <em>sorted</em> array in O(log n) time by repeatedly halving the search space.",
+        "<blockquote># Python binary search\nimport bisect\n\n# Manual implementation\ndef binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n\nbinary_search([1,3,5,7,9,11], 7)  # returns 3</blockquote>",
+        "In data science, binary search is used to: find thresholds in sorted probability distributions, search sorted database indexes, and implement efficient range queries.",
+        "For n=1,000,000 elements: linear search = up to 1,000,000 comparisons; binary search = at most 20 comparisons (log₂(1,000,000) ≈ 20).",
+        "<h4>Instructions</h4>",
+        "Implement <code>binarySearch</code> that takes a sorted array <code>arr</code> and a <code>target</code> value. Return the index of <code>target</code> if found, or <code>-1</code> if not found."
+      ],
+      "challengeSeed": [
+        "function binarySearch(arr, target) {",
+        "  var left = 0;",
+        "  var right = arr.length - 1;",
+        "  while (left <= right) {",
+        "    var mid = Math.floor((left + right) / 2);",
+        "    // Compare arr[mid] with target and update left/right",
+        "",
+        "  }",
+        "  return -1;",
+        "}"
+      ],
+      "solutions": [
+        "function binarySearch(arr, target) {\n  var left = 0;\n  var right = arr.length - 1;\n  while (left <= right) {\n    var mid = Math.floor((left + right) / 2);\n    if (arr[mid] === target) return mid;\n    else if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}"
+      ],
+      "tests": [
+        "assert(binarySearch([1,3,5,7,9,11], 7) === 3, 'message: Should find 7 at index 3.');",
+        "assert(binarySearch([1,3,5,7,9,11], 1) === 0, 'message: Should find 1 at index 0.');",
+        "assert(binarySearch([1,3,5,7,9,11], 11) === 5, 'message: Should find 11 at index 5.');",
+        "assert(binarySearch([1,3,5,7,9,11], 4) === -1, 'message: Should return -1 for a missing value.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

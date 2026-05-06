@@ -1,0 +1,58 @@
+{
+  "name": "Information Security Projects",
+  "order": 2,
+  "time": "20 hours",
+  "helpRoom": "HelpBackEnd",
+  "challenges": [
+    {
+      "id": "2026sec02b001c0040001def1",
+      "title": "Build a Stock Price Checker",
+      "description": [
+        "Build a secure stock price checking app using a public stock API.",
+        "User Story: I can check the current price of a stock by ticker symbol.",
+        "User Story: I can 'like' a stock. My IP address is anonymized (hashed) before being stored.",
+        "User Story: I can compare two stocks and see which has more likes.",
+        "Security requirements: implement Helmet.js security headers, rate limiting on API endpoints, and input sanitization for ticker symbols.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sec02b002c0040001def2",
+      "title": "Build a Secure Real-Time Chat App",
+      "description": [
+        "Build a real-time chat application with proper authentication and security measures.",
+        "User Story: I can register and log in with a username and password (properly hashed with bcrypt).",
+        "User Story: Messages are sent and received in real time using WebSockets.",
+        "User Story: Only authenticated users can send messages.",
+        "Security requirements: JWT or session-based auth, XSS-sanitized message output, CSRF protection, rate limiting on message sending (max 10 messages per minute).",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sec02b003c0040001def3",
+      "title": "Claim your Information Security Certification",
+      "description": [
+        "Congratulations on completing the Information Security certification!",
+        "You have learned password hashing, XSS prevention, JWT authentication, rate limiting, and how to build secure applications."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "checkpoint",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "name": "SQL Fundamentals",
+  "order": 1,
+  "time": "10 hours",
+  "helpRoom": "HelpBackEnd",
+  "challenges": [
+    {
+      "id": "2026sq001b001c0010001def1",
+      "title": "SELECT and WHERE: Querying Your Data",
+      "description": [
+        "SQL (Structured Query Language) is the universal language for working with relational databases. In 2026, SQL remains essential — PostgreSQL, MySQL, SQLite, and cloud databases like BigQuery, Snowflake, and Aurora all use it.",
+        "The most fundamental SQL operation is the <strong>SELECT</strong> statement:",
+        "<blockquote>-- Select all columns\nSELECT * FROM users;\n\n-- Select specific columns\nSELECT name, email FROM users;\n\n-- Filter with WHERE\nSELECT name, salary FROM employees\nWHERE salary > 50000 AND department = 'Engineering';\n\n-- Comparison operators: =, !=, >, <, >=, <=, BETWEEN, IN, LIKE\nSELECT * FROM products WHERE price BETWEEN 10 AND 50;\nSELECT * FROM users WHERE role IN ('admin', 'moderator');\nSELECT * FROM posts WHERE title LIKE '%JavaScript%';</blockquote>",
+        "In JavaScript, the equivalent of <code>SELECT</code> is <code>.map()</code>, <code>WHERE</code> is <code>.filter()</code>, and <code>SELECT column</code> is accessing object properties.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>sqlSelect</code> that takes an array of objects (<code>rows</code>), an array of column names (<code>columns</code>), and a predicate function (<code>where</code>). Return the filtered rows with only the specified columns. If <code>columns</code> is <code>['*']</code>, return all columns."
+      ],
+      "challengeSeed": [
+        "// Simulates: SELECT columns FROM table WHERE predicate",
+        "function sqlSelect(rows, columns, where) {",
+        "  // 1. Filter rows using the where predicate",
+        "  // 2. Map to only include specified columns (or all if columns=['*'])",
+        "}"
+      ],
+      "solutions": [
+        "function sqlSelect(rows, columns, where) {\n  var filtered = where ? rows.filter(where) : rows;\n  if (columns[0] === '*') return filtered;\n  return filtered.map(function(row) {\n    var result = {};\n    columns.forEach(function(col) { result[col] = row[col]; });\n    return result;\n  });\n}"
+      ],
+      "tests": [
+        "var data = [{id:1,name:'Alice',age:30,dept:'Eng'},{id:2,name:'Bob',age:25,dept:'HR'},{id:3,name:'Carol',age:35,dept:'Eng'}]; var r = sqlSelect(data, ['name','dept'], function(row) { return row.dept === 'Eng'; }); assert(r.length === 2 && r[0].name === 'Alice', 'message: Should filter to Eng department only.');",
+        "assert(r[0].age === undefined, 'message: Only selected columns should be present.');",
+        "var all = sqlSelect(data, ['*'], null); assert(all.length === 3 && all[0].age === 30, 'message: SELECT * should return all columns and rows.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sq001b002c0010001def2",
+      "title": "ORDER BY and LIMIT: Sorting and Paging Results",
+      "description": [
+        "<strong>ORDER BY</strong> sorts query results by one or more columns. <strong>LIMIT</strong> restricts the number of returned rows — essential for pagination in web apps.",
+        "<blockquote>-- Sort by salary descending, then name ascending\nSELECT name, salary FROM employees\nORDER BY salary DESC, name ASC;\n\n-- Pagination: page 3, 10 items per page\nSELECT * FROM products\nORDER BY created_at DESC\nLIMIT 10 OFFSET 20; -- skip first 20, take next 10\n\n-- Top 5 highest earners\nSELECT name, salary FROM employees\nORDER BY salary DESC\nLIMIT 5;</blockquote>",
+        "LIMIT/OFFSET pagination is used in virtually every web application: news feeds, search results, product listings, user tables.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>sqlOrderLimit</code> that takes <code>rows</code>, a <code>sortKey</code> string, a <code>direction</code> (<code>'ASC'</code> or <code>'DESC'</code>), a <code>limit</code> number, and an <code>offset</code> number. Return the sorted, paged results."
+      ],
+      "challengeSeed": [
+        "// Simulates: ORDER BY sortKey direction LIMIT limit OFFSET offset",
+        "function sqlOrderLimit(rows, sortKey, direction, limit, offset) {",
+        "  // 1. Sort a copy of rows by sortKey",
+        "  // 2. Apply offset and limit",
+        "}"
+      ],
+      "solutions": [
+        "function sqlOrderLimit(rows, sortKey, direction, limit, offset) {\n  var sorted = rows.slice().sort(function(a, b) {\n    if (a[sortKey] < b[sortKey]) return direction === 'ASC' ? -1 : 1;\n    if (a[sortKey] > b[sortKey]) return direction === 'ASC' ? 1 : -1;\n    return 0;\n  });\n  return sorted.slice(offset, offset + limit);\n}"
+      ],
+      "tests": [
+        "var data = [{name:'Carol',salary:95000},{name:'Alice',salary:70000},{name:'Bob',salary:85000}]; var r = sqlOrderLimit(data, 'salary', 'DESC', 2, 0); assert(r[0].name === 'Carol' && r[1].name === 'Bob', 'message: DESC order should put highest salary first.');",
+        "var r2 = sqlOrderLimit(data, 'salary', 'ASC', 1, 1); assert(r2[0].name === 'Bob', 'message: ASC with offset=1 should skip Alice (lowest) and return Bob.');",
+        "assert(data[0].name === 'Carol', 'message: Original array should not be mutated.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sq001b003c0010001def3",
+      "title": "JOIN: Combining Data from Multiple Tables",
+      "description": [
+        "<strong>JOIN</strong> is one of SQL's most powerful features — it combines rows from two tables based on a related column. Understanding joins is crucial for working with relational databases.",
+        "<blockquote>-- INNER JOIN: rows that match in both tables\nSELECT users.name, orders.total\nFROM users\nINNER JOIN orders ON users.id = orders.user_id;\n\n-- LEFT JOIN: all users, even those without orders\nSELECT users.name, orders.total\nFROM users\nLEFT JOIN orders ON users.id = orders.user_id;\n-- (orders.total will be NULL for users with no orders)\n\n-- SELF JOIN: a table joined with itself\nSELECT e.name as employee, m.name as manager\nFROM employees e\nJOIN employees m ON e.manager_id = m.id;</blockquote>",
+        "Join types: <strong>INNER JOIN</strong> (only matching rows), <strong>LEFT JOIN</strong> (all left rows + matching right), <strong>RIGHT JOIN</strong> (all right + matching left), <strong>FULL OUTER JOIN</strong> (all rows from both).",
+        "<h4>Instructions</h4>",
+        "Implement <code>innerJoin</code> that takes two arrays (<code>tableA</code>, <code>tableB</code>), and two key strings (<code>keyA</code>, <code>keyB</code>). Return an array of merged objects for rows where <code>tableA[i][keyA] === tableB[j][keyB]</code>."
+      ],
+      "challengeSeed": [
+        "// Simulates: SELECT * FROM tableA INNER JOIN tableB ON tableA.keyA = tableB.keyB",
+        "function innerJoin(tableA, tableB, keyA, keyB) {",
+        "  var result = [];",
+        "  tableA.forEach(function(rowA) {",
+        "    tableB.forEach(function(rowB) {",
+        "      // If keys match, merge both rows and push to result",
+        "    });",
+        "  });",
+        "  return result;",
+        "}"
+      ],
+      "solutions": [
+        "function innerJoin(tableA, tableB, keyA, keyB) {\n  var result = [];\n  tableA.forEach(function(rowA) {\n    tableB.forEach(function(rowB) {\n      if (rowA[keyA] === rowB[keyB]) {\n        var merged = {};\n        Object.keys(rowA).forEach(function(k) { merged[k] = rowA[k]; });\n        Object.keys(rowB).forEach(function(k) { merged[k] = rowB[k]; });\n        result.push(merged);\n      }\n    });\n  });\n  return result;\n}"
+      ],
+      "tests": [
+        "var users = [{id:1,name:'Alice'},{id:2,name:'Bob'},{id:3,name:'Carol'}]; var orders = [{user_id:1,total:100},{user_id:1,total:200},{user_id:2,total:150}]; var joined = innerJoin(users, orders, 'id', 'user_id'); assert(joined.length === 3, 'message: Should return 3 joined rows (Alice has 2 orders, Bob has 1).');",
+        "assert(joined[0].name === 'Alice' && joined[0].total === 100, 'message: Merged row should have properties from both tables.');",
+        "assert(!joined.some(function(r) { return r.name === 'Carol'; }), 'message: Carol has no orders, should not appear in INNER JOIN.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sq001b004c0010001def4",
+      "title": "Aggregate Functions: COUNT, SUM, AVG, GROUP BY",
+      "description": [
+        "Aggregate functions compute a single result from multiple rows. Combined with <strong>GROUP BY</strong>, they produce per-group statistics — essential for analytics and reporting.",
+        "<blockquote>-- Count orders per user\nSELECT user_id, COUNT(*) as order_count\nFROM orders\nGROUP BY user_id;\n\n-- Average salary by department\nSELECT department, AVG(salary) as avg_salary, MAX(salary) as top_salary\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 80000;  -- HAVING filters AFTER grouping\n\n-- Total revenue by month\nSELECT MONTH(created_at) as month, SUM(total) as revenue\nFROM orders\nGROUP BY MONTH(created_at)\nORDER BY month;</blockquote>",
+        "<code>HAVING</code> is like <code>WHERE</code> but applied after GROUP BY — it filters groups, not rows.",
+        "<h4>Instructions</h4>",
+        "Write <code>groupByAgg</code> that takes <code>rows</code>, a <code>groupKey</code> to group by, and an <code>aggFn</code> function that receives an array of values and returns an aggregate. Also takes <code>valueKey</code>. Return an array of <code>{ group, aggregate }</code> objects sorted by group name."
+      ],
+      "challengeSeed": [
+        "// Simulates: SELECT groupKey, aggFn(valueKey) FROM rows GROUP BY groupKey",
+        "function groupByAgg(rows, groupKey, valueKey, aggFn) {",
+        "  var groups = {};",
+        "  rows.forEach(function(row) {",
+        "    var key = row[groupKey];",
+        "    if (!groups[key]) groups[key] = [];",
+        "    groups[key].push(row[valueKey]);",
+        "  });",
+        "  // Convert groups object to array of { group, aggregate } objects",
+        "}"
+      ],
+      "solutions": [
+        "function groupByAgg(rows, groupKey, valueKey, aggFn) {\n  var groups = {};\n  rows.forEach(function(row) {\n    var key = row[groupKey];\n    if (!groups[key]) groups[key] = [];\n    groups[key].push(row[valueKey]);\n  });\n  return Object.keys(groups).sort().map(function(key) {\n    return { group: key, aggregate: aggFn(groups[key]) };\n  });\n}"
+      ],
+      "tests": [
+        "var data = [{dept:'Eng',salary:90000},{dept:'Eng',salary:100000},{dept:'HR',salary:65000},{dept:'HR',salary:70000}]; var sum = function(vals) { return vals.reduce(function(a,b){return a+b;},0); }; var r = groupByAgg(data, 'dept', 'salary', sum); assert(r.length === 2, 'message: Should have 2 groups.');",
+        "assert(r[0].group === 'Eng' && r[0].aggregate === 190000, 'message: Eng total salary should be 190000.');",
+        "assert(r[1].group === 'HR' && r[1].aggregate === 135000, 'message: HR total salary should be 135000.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

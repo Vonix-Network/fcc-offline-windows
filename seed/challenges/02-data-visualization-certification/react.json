@@ -1,14 +1,20 @@
 {
   "name": "React",
   "order": 14,
-  "isComingSoon": true,
   "time": "5 hours",
   "helpRoom": "HelpDataViz",
   "challenges": [
     {
       "id": "bd7158d8c423ede3aeb5bdee",
-      "title": "Learn React Challenges",
-      "description": [],
+      "title": "Create a Simple React Component",
+      "description": [
+        "React is a JavaScript library for building user interfaces using reusable components. A React component is a function (or class) that returns JSX — a syntax extension that looks like HTML but compiles to JavaScript.",
+        "<blockquote>// Functional component (modern React)\nfunction Welcome(props) {\n  return &lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;;\n}\n\n// Render it\nReactDOM.render(\n  &lt;Welcome name=\"Alice\" /&gt;,\n  document.getElementById('root')\n);</blockquote>",
+        "React components receive <strong>props</strong> (properties) as input and return UI as output. Props are read-only — a component never modifies its own props.",
+        "<h4>Instructions</h4>",
+        "The JSX editor for React challenges is not available in this offline build. To practice React, use CodePen with the React and ReactDOM scripts, or set up a local project with <code>npx create-react-app my-app</code> or <code>npx create-next-app</code>.",
+        "Study the React documentation sections: Components and Props, State and Lifecycle, Handling Events, and Hooks (useState, useEffect). Return to the map when ready to continue."
+      ],
       "challengeSeed": [],
       "tests": [],
       "type": "waypoint",

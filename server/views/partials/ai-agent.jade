@@ -1,0 +1,582 @@
+//- ── Vonix Code Camp AI Tutor Widget ───────────────────────────────────────
+//- Puter.js-powered AI agent with teacher mode, model switching, and
+//- custom OpenAI endpoint support. Accessible from every page.
+
+#vcc-ai-root
+  //- Floating trigger button
+  button#vcc-ai-trigger(title='AI Tutor (Ctrl+Shift+A)')
+    span.vcc-ai-trigger-icon ✦
+    span.vcc-ai-trigger-label AI Tutor
+
+  //- Main panel
+  #vcc-ai-panel.vcc-ai-hidden
+    //- Panel header
+    .vcc-ai-header
+      .vcc-ai-header-left
+        span.vcc-ai-logo ✦
+        span.vcc-ai-title Vonix AI Tutor
+      .vcc-ai-header-right
+        button#vcc-ai-teacher-btn.vcc-ai-icon-btn(title='Toggle Teacher Mode')
+          span#vcc-ai-teacher-icon 🎓
+        button#vcc-ai-settings-btn.vcc-ai-icon-btn(title='Settings')
+          span ⚙
+        button#vcc-ai-close-btn.vcc-ai-icon-btn(title='Close') ✕
+
+    //- Context + status bar
+    .vcc-ai-status-bar
+      span#vcc-ai-context-label.vcc-ai-ctx-text 📍 Home
+      span#vcc-ai-teacher-badge.vcc-ai-badge 🎓 Teacher Mode
+
+    //- Message stream area
+    #vcc-ai-messages
+      .vcc-ai-welcome
+        p.vcc-ai-welcome-title Hi! I'm your Vonix AI Tutor.
+        p.vcc-ai-welcome-sub I have full context for your current challenge and can help you understand any concept. Toggle 🎓 Teacher Mode for structured, memorable explanations.
+
+    //- Typing indicator (hidden by default)
+    #vcc-ai-typing.vcc-ai-hidden
+      .vcc-ai-typing-dot
+      .vcc-ai-typing-dot
+      .vcc-ai-typing-dot
+
+    //- Input area
+    .vcc-ai-input-area
+      .vcc-ai-model-row
+        select#vcc-ai-model-select.vcc-ai-select(title='Select AI Model')
+          optgroup(label='── Via Puter.js (Free, requires internet) ──')
+            option(value='gpt-4o') GPT-4o
+            option(value='gpt-4o-mini') GPT-4o Mini
+            option(value='o3-mini') o3 Mini
+            option(value='claude-3-5-sonnet') Claude 3.5 Sonnet
+            option(value='gemini-2.0-flash') Gemini 2.0 Flash
+            option(value='deepseek-r1') DeepSeek R1
+            option(value='deepseek-v3') DeepSeek V3
+            option(value='llama-3.3-70b') Llama 3.3 70B (Free)
+          optgroup(label='── Custom Endpoint (your key / Ollama) ──')
+            option(value='custom') Custom Endpoint ⚙
+        #vcc-ai-stream-indicator.vcc-ai-hidden ◉ streaming
+      .vcc-ai-input-row
+        textarea#vcc-ai-input(placeholder='Ask me anything about this challenge...' rows='1')
+        button#vcc-ai-send-btn(title='Send (Enter)')
+          span ➤
+
+    //- Settings overlay
+    #vcc-ai-settings-panel.vcc-ai-hidden
+      h3.vcc-ai-settings-title ⚙ Settings
+      .vcc-ai-setting-group
+        label.vcc-ai-setting-label Custom OpenAI Base URL
+        input#vcc-ai-base-url.vcc-ai-setting-input(type='text' placeholder='https://api.openai.com/v1')
+        p.vcc-ai-setting-hint Works with Ollama (http://localhost:11434/v1), LM Studio, or any OpenAI-compatible endpoint.
+      .vcc-ai-setting-group
+        label.vcc-ai-setting-label API Key
+        input#vcc-ai-api-key.vcc-ai-setting-input(type='password' placeholder='sk-... (or "ollama" for local)')
+      .vcc-ai-setting-group
+        label.vcc-ai-setting-label Model Name (for custom endpoint)
+        input#vcc-ai-custom-model.vcc-ai-setting-input(type='text' placeholder='gpt-4o, llama3, mistral, etc.')
+      .vcc-ai-setting-group
+        .vcc-ai-setting-row
+          span.vcc-ai-setting-label Teacher Mode
+          label.vcc-ai-toggle
+            input#vcc-ai-teacher-toggle(type='checkbox')
+            span.vcc-ai-toggle-slider
+      .vcc-ai-settings-actions
+        button#vcc-ai-save-settings.vcc-ai-btn-save Save Settings
+        button#vcc-ai-clear-chat.vcc-ai-btn-danger Clear Chat
+
+script.
+  (function () {
+    'use strict';
+
+    // ── Constants ──────────────────────────────────────────────────────────
+    var STORAGE_KEY = 'vcc_ai_agent_v1';
+    var MAX_HISTORY  = 20;  // message pairs kept in context window
+
+    // ── Load persisted state ───────────────────────────────────────────────
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) {}
+
+    var state = {
+      open:          false,
+      showSettings:  false,
+      streaming:     false,
+      teacherMode:   saved.teacherMode !== false, // default ON
+      model:         saved.model        || 'gpt-4o',
+      customBaseUrl: saved.customBaseUrl || 'https://api.openai.com/v1',
+      customApiKey:  saved.customApiKey  || '',
+      customModel:   saved.customModel   || 'gpt-4o',
+      history:       [],  // {role, content, html?}
+      puterReady:    false
+    };
+
+    function persist() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          teacherMode:   state.teacherMode,
+          model:         state.model,
+          customBaseUrl: state.customBaseUrl,
+          customApiKey:  state.customApiKey,
+          customModel:   state.customModel
+        }));
+      } catch (e) {}
+    }
+
+    // ── Puter.js lazy loader ───────────────────────────────────────────────
+    function loadPuter() {
+      if (window.puter) { state.puterReady = true; return; }
+      var s = document.createElement('script');
+      s.src = 'https://js.puter.com/v2/';
+      s.async = true;
+      s.onload  = function () { state.puterReady = true; };
+      s.onerror = function () { state.puterReady = false; };
+      document.head.appendChild(s);
+    }
+    loadPuter();
+
+    // ── DOM refs ───────────────────────────────────────────────────────────
+    var $ = function (id) { return document.getElementById(id); };
+    var trigger      = $('vcc-ai-trigger');
+    var panel        = $('vcc-ai-panel');
+    var closeBtn     = $('vcc-ai-close-btn');
+    var teacherBtn   = $('vcc-ai-teacher-btn');
+    var teacherIcon  = $('vcc-ai-teacher-icon');
+    var teacherBadge = $('vcc-ai-teacher-badge');
+    var settingsBtn  = $('vcc-ai-settings-btn');
+    var settingsPanel= $('vcc-ai-settings-panel');
+    var modelSelect  = $('vcc-ai-model-select');
+    var msgArea      = $('vcc-ai-messages');
+    var inputEl      = $('vcc-ai-input');
+    var sendBtn      = $('vcc-ai-send-btn');
+    var typingEl     = $('vcc-ai-typing');
+    var contextLabel = $('vcc-ai-context-label');
+    var streamInd    = $('vcc-ai-stream-indicator');
+    // settings fields
+    var baseUrlInput    = $('vcc-ai-base-url');
+    var apiKeyInput     = $('vcc-ai-api-key');
+    var customModelInput= $('vcc-ai-custom-model');
+    var teacherToggle   = $('vcc-ai-teacher-toggle');
+    var saveSettingsBtn = $('vcc-ai-save-settings');
+    var clearChatBtn    = $('vcc-ai-clear-chat');
+
+    // ── Page context detection ─────────────────────────────────────────────
+    function getPageContext() {
+      var c    = window.common || {};
+      var path = window.location.pathname;
+
+      // Challenge pages expose window.common.challengeName
+      var cName = c.challengeName || window.challengeName || null;
+      if (cName) {
+        var descEl  = document.querySelector('.challenge-instructions');
+        var descTxt = descEl ? descEl.innerText.slice(0, 900) : '';
+        var blockEl = document.querySelector('.challenge-instructions-title');
+        var blockTxt= blockEl ? blockEl.innerText : '';
+        return {
+          type:      'challenge',
+          label:     '📝 ' + cName,
+          name:      cName,
+          block:     blockTxt,
+          desc:      descTxt,
+          chalType:  c.challengeType
+        };
+      }
+      if (path.match(/\/map/))  return { type: 'map',   label: '🗺 Curriculum Map', name: 'Curriculum Map', desc: '' };
+      if (path.match(/\/about/))return { type: 'about', label: 'ℹ About',           name: 'About Page',     desc: '' };
+      return { type: 'home', label: '🏠 Home', name: 'Vonix Code Camp Home', desc: '' };
+    }
+
+    function updateContextLabel() {
+      var ctx = getPageContext();
+      contextLabel.textContent = ctx.label;
+    }
+
+    // ── System prompt builder ──────────────────────────────────────────────
+    function buildSystemPrompt() {
+      var ctx = getPageContext();
+
+      var pageBlock = ctx.type === 'challenge'
+        ? '=== CURRENT CHALLENGE ===\n' +
+          'Challenge Name: ' + ctx.name + '\n' +
+          (ctx.block ? 'Block: ' + ctx.block + '\n' : '') +
+          (ctx.desc  ? 'Challenge Description:\n' + ctx.desc + '\n' : '') +
+          'PRIMARY FOCUS: Help the student understand and complete this specific challenge. Answer their question about it first before branching out.\n'
+        : '=== CURRENT PAGE ===\n' +
+          'Page: ' + ctx.name + '\n' +
+          'PRIMARY FOCUS: Help the student navigate the curriculum and answer general coding questions.\n';
+
+      var teacherBlock = state.teacherMode
+        ? '\n=== TEACHER MODE: ACTIVE ===\n' +
+          'Apply these evidence-based pedagogical principles in every response:\n' +
+          '• ACTIVATE PRIOR KNOWLEDGE — Before explaining, ask: "What do you already know about X?"\n' +
+          '• FEYNMAN TECHNIQUE — Explain concepts as if to a 10-year-old first, then add depth.\n' +
+          '• ANALOGIES FIRST — Introduce every abstract concept with a concrete real-world analogy.\n' +
+          '• CHUNKING — Break explanations into numbered steps. Never give more than 3-4 steps at once.\n' +
+          '• ACTIVE RECALL — After explaining, ask ONE checking question: "So in your own words, what does X do?"\n' +
+          '• MEMORY ANCHOR — End each explanation with a one-line mnemonic or vivid metaphor to remember the concept.\n' +
+          '• SCAFFOLDED HINTS — When a student is stuck, give a hint (not the answer). Escalate hints only if needed.\n' +
+          '• POSITIVE FRAMING — Celebrate attempts, normalize mistakes: "That\'s a very common confusion — here\'s why..."\n' +
+          'Response structure: Concept → Analogy → Stepped Example → Practice Question → Memory Anchor\n'
+        : '';
+
+      return 'You are the Vonix Code Camp AI Tutor — an expert programming teacher embedded in the Vonix Code Camp offline coding curriculum (May 2026 edition).\n\n' +
+        pageBlock + teacherBlock +
+        '\n=== VONIX CODE CAMP CURRICULUM (Full Knowledge) ===\n' +
+        'Track 01 — Responsive Web Design: HTML5 semantic elements, CSS3, Flexbox, CSS Grid, accessibility, responsive design patterns.\n' +
+        'Track 02 — JavaScript Algorithms & Data Structures: ES6+ syntax, closures, prototypal inheritance, async/await, Promises, data structures (stacks, queues, trees, graphs), algorithm complexity (Big-O), sorting and search algorithms.\n' +
+        'Track 03 — Back End Development: Node.js, Express.js, RESTful APIs, MongoDB/Mongoose, authentication, automated testing, Git/GitHub workflows.\n' +
+        'Track 04 — Data Visualization: D3.js, SVG manipulation, React (class components), Sass/SCSS.\n' +
+        'Track 05 — Python & Data Science: Python syntax vs JS, lists/dicts/sets, list comprehensions, classes, generators, error handling, NumPy array ops, Pandas DataFrames, data cleaning, normalization, groupBy aggregation, binary search, merge sort, dynamic programming.\n' +
+        'Track 06 — AI & Modern Web: TypeScript (interfaces, generics, union types, type guards), React Hooks (useState, useEffect, custom hooks), Next.js App Router, Server Components, LLM fundamentals (tokens, embeddings, cosine similarity), prompt engineering (zero-shot, few-shot, CoT, structured output), RAG architecture, AI agent tool dispatch patterns.\n' +
+        'Track 07 — Relational Databases: SQL (SELECT/WHERE/ORDER BY/GROUP BY/JOIN/HAVING), PostgreSQL schema design, constraints, indexes, ACID transactions.\n' +
+        'Track 08 — Information Security: bcrypt/Argon2 password hashing, XSS prevention and HTML escaping, JWT creation and verification, rate limiting algorithms, HTTPS/TLS concepts.\n' +
+        '\n=== CHALLENGE TYPES ===\n' +
+        'challengeType 1 = JS editor (student writes code, auto-tested)\n' +
+        'challengeType 5 = Algorithm/bonfire (algorithm challenges)\n' +
+        'challengeType 3 = Project/zipline (open-ended build projects)\n' +
+        '\n=== BEHAVIOR RULES ===\n' +
+        '• You can answer ANY programming or computer science question, not just VCC curriculum topics.\n' +
+        '• When showing code, ALWAYS wrap in triple-backtick fences with the language: ```javascript\\ncode\\n```\n' +
+        '• Keep responses focused and scannable. Use bullet points for lists.\n' +
+        '• If the student shares code, review it carefully before responding.\n' +
+        '• For TypeScript examples, show the JS equivalent side-by-side when helpful.\n' +
+        '• For Python concepts, relate them to JavaScript equivalents the student already knows.\n';
+    }
+
+    // ── Simple Markdown renderer ───────────────────────────────────────────
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function renderMarkdown(raw) {
+      var s = raw;
+      // Fenced code blocks
+      s = s.replace(/```(\w*)\n?([\s\S]*?)```/g, function (_, lang, code) {
+        var l = lang || 'code';
+        return '<div class="vcc-ai-code-block"><div class="vcc-ai-code-lang">' +
+          escHtml(l) + '</div><pre><code>' + escHtml(code.trim()) + '</code></pre>' +
+          '<button class="vcc-ai-copy-btn" onclick="vccCopyCode(this)">Copy</button></div>';
+      });
+      // Inline code
+      s = s.replace(/`([^`\n]+)`/g, '<code class="vcc-ai-inline">$1</code>');
+      // Bold
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // Italic
+      s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+      // Headings
+      s = s.replace(/^### (.+)$/gm, '<h4 class="vcc-ai-h">$1</h4>');
+      s = s.replace(/^## (.+)$/gm,  '<h3 class="vcc-ai-h">$1</h3>');
+      // Bullet points
+      s = s.replace(/^[•\-\*] (.+)$/gm, '<li>$1</li>');
+      s = s.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul class="vcc-ai-ul">$1</ul>');
+      // Numbered list
+      s = s.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+      // Line breaks (not inside code)
+      s = s.replace(/\n\n/g, '</p><p class="vcc-ai-p">');
+      s = s.replace(/\n/g, '<br>');
+      return '<p class="vcc-ai-p">' + s + '</p>';
+    }
+
+    // Global copy helper (called from inline onclick)
+    window.vccCopyCode = function (btn) {
+      var code = btn.parentElement.querySelector('code').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function () {
+          btn.textContent = 'Copied!';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+      }
+    };
+
+    // ── Message rendering ──────────────────────────────────────────────────
+    function appendMessage(role, html, streaming) {
+      var wrap = document.createElement('div');
+      wrap.className = 'vcc-ai-msg vcc-ai-msg-' + role + (streaming ? ' vcc-ai-streaming' : '');
+      if (role === 'assistant') {
+        wrap.innerHTML = '<span class="vcc-ai-msg-icon">✦</span><div class="vcc-ai-msg-body">' + html + '</div>';
+      } else {
+        wrap.innerHTML = '<div class="vcc-ai-msg-body">' + escHtml(html) + '</div>';
+      }
+      msgArea.appendChild(wrap);
+      msgArea.scrollTop = msgArea.scrollHeight;
+      return wrap;
+    }
+
+    function appendError(text) {
+      var wrap = document.createElement('div');
+      wrap.className = 'vcc-ai-msg vcc-ai-msg-error';
+      wrap.innerHTML = '<div class="vcc-ai-msg-body">⚠ ' + escHtml(text) + '</div>';
+      msgArea.appendChild(wrap);
+      msgArea.scrollTop = msgArea.scrollHeight;
+    }
+
+    // ── Build messages array for API ───────────────────────────────────────
+    function buildApiMessages(userText) {
+      var msgs = [{ role: 'system', content: buildSystemPrompt() }];
+      var slice = state.history.slice(-MAX_HISTORY);
+      slice.forEach(function (m) {
+        msgs.push({ role: m.role, content: m.content });
+      });
+      msgs.push({ role: 'user', content: userText });
+      return msgs;
+    }
+
+    // ── Streaming via Puter.js ─────────────────────────────────────────────
+    async function streamPuter(messages, msgWrap) {
+      var body = msgWrap.querySelector('.vcc-ai-msg-body');
+      var raw  = '';
+      var model = state.model === 'custom' ? (state.customModel || 'gpt-4o') : state.model;
+
+      var response = await puter.ai.chat(messages, { model: model, stream: true });
+
+      for await (var chunk of response) {
+        if (chunk && chunk.text) {
+          raw += chunk.text;
+          body.innerHTML = renderMarkdown(raw);
+          msgArea.scrollTop = msgArea.scrollHeight;
+        }
+      }
+      return raw;
+    }
+
+    // ── Streaming via custom OpenAI-compatible endpoint ────────────────────
+    async function streamCustom(messages, msgWrap) {
+      var body    = msgWrap.querySelector('.vcc-ai-msg-body');
+      var baseUrl = (state.customBaseUrl || 'https://api.openai.com/v1').replace(/\/$/, '');
+      var model   = state.customModel || 'gpt-4o';
+      var raw     = '';
+
+      var resp = await fetch(baseUrl + '/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + state.customApiKey
+        },
+        body: JSON.stringify({ model: model, messages: messages, stream: true })
+      });
+
+      if (!resp.ok) {
+        var errText = await resp.text();
+        throw new Error('API ' + resp.status + ': ' + errText.slice(0, 200));
+      }
+
+      var reader  = resp.body.getReader();
+      var decoder = new TextDecoder();
+      var buf     = '';
+
+      while (true) {
+        var result = await reader.read();
+        if (result.done) break;
+        buf += decoder.decode(result.value, { stream: true });
+        var lines = buf.split('\n');
+        buf = lines.pop();
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (!line.startsWith('data: ')) continue;
+          var data = line.slice(6).trim();
+          if (data === '[DONE]') break;
+          try {
+            var parsed = JSON.parse(data);
+            var token  = parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.content;
+            if (token) {
+              raw += token;
+              body.innerHTML = renderMarkdown(raw);
+              msgArea.scrollTop = msgArea.scrollHeight;
+            }
+          } catch (e) { /* partial JSON */ }
+        }
+      }
+      return raw;
+    }
+
+    // ── Main send handler ──────────────────────────────────────────────────
+    async function sendMessage() {
+      var text = inputEl.value.trim();
+      if (!text || state.streaming) return;
+
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      state.streaming = true;
+      streamInd.classList.remove('vcc-ai-hidden');
+      sendBtn.disabled = true;
+      typingEl.classList.remove('vcc-ai-hidden');
+
+      // Append user bubble
+      appendMessage('user', text);
+      state.history.push({ role: 'user', content: text });
+
+      // Remove welcome message
+      var welcome = msgArea.querySelector('.vcc-ai-welcome');
+      if (welcome) welcome.remove();
+
+      var messages = buildApiMessages(text);
+
+      // Create streaming assistant bubble
+      var assistMsgWrap = appendMessage('assistant', '', true);
+      typingEl.classList.add('vcc-ai-hidden');
+
+      var raw = '';
+      try {
+        var useCustom = state.model === 'custom' ||
+                        (state.customApiKey && state.customApiKey.length > 0 && state.model === 'custom');
+        var forceCustom = state.model === 'custom';
+
+        if (forceCustom) {
+          if (!state.customApiKey) throw new Error('No API key set. Open ⚙ Settings and add your key.');
+          raw = await streamCustom(messages, assistMsgWrap);
+        } else {
+          if (!window.puter) throw new Error('Puter.js not loaded yet. Wait a moment and try again, or configure a custom endpoint in ⚙ Settings.');
+          raw = await streamPuter(messages, assistMsgWrap);
+        }
+
+        assistMsgWrap.classList.remove('vcc-ai-streaming');
+        state.history.push({ role: 'assistant', content: raw });
+
+      } catch (err) {
+        assistMsgWrap.remove();
+        appendError(err.message || 'Something went wrong. Check your settings or internet connection.');
+        state.history.push({ role: 'assistant', content: '[Error: ' + (err.message || 'unknown') + ']' });
+      }
+
+      state.streaming = false;
+      streamInd.classList.add('vcc-ai-hidden');
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+
+    // ── Teacher mode ───────────────────────────────────────────────────────
+    function updateTeacherUI() {
+      if (state.teacherMode) {
+        teacherBadge.classList.remove('vcc-ai-hidden');
+        teacherIcon.textContent = '🎓';
+        teacherBtn.title = 'Teacher Mode ON — click to disable';
+        teacherBtn.classList.add('vcc-ai-btn-active');
+      } else {
+        teacherBadge.classList.add('vcc-ai-hidden');
+        teacherIcon.textContent = '💬';
+        teacherBtn.title = 'Teacher Mode OFF — click to enable';
+        teacherBtn.classList.remove('vcc-ai-btn-active');
+      }
+      if (teacherToggle) teacherToggle.checked = state.teacherMode;
+    }
+
+    // ── Settings panel ─────────────────────────────────────────────────────
+    function openSettings() {
+      state.showSettings = true;
+      settingsPanel.classList.remove('vcc-ai-hidden');
+      if (baseUrlInput)     baseUrlInput.value     = state.customBaseUrl;
+      if (apiKeyInput)      apiKeyInput.value      = state.customApiKey;
+      if (customModelInput) customModelInput.value = state.customModel;
+      if (teacherToggle)    teacherToggle.checked  = state.teacherMode;
+    }
+
+    function closeSettings() {
+      state.showSettings = false;
+      settingsPanel.classList.add('vcc-ai-hidden');
+    }
+
+    function saveSettings() {
+      state.customBaseUrl = baseUrlInput.value.trim()  || 'https://api.openai.com/v1';
+      state.customApiKey  = apiKeyInput.value.trim();
+      state.customModel   = customModelInput.value.trim() || 'gpt-4o';
+      state.teacherMode   = teacherToggle.checked;
+      persist();
+      updateTeacherUI();
+      closeSettings();
+      // Flash confirmation
+      saveSettingsBtn.textContent = 'Saved ✓';
+      setTimeout(function () { saveSettingsBtn.textContent = 'Save Settings'; }, 2000);
+    }
+
+    // ── Open / close panel ─────────────────────────────────────────────────
+    function openPanel() {
+      state.open = true;
+      panel.classList.remove('vcc-ai-hidden');
+      panel.classList.add('vcc-ai-open');
+      trigger.classList.add('vcc-ai-trigger-open');
+      updateContextLabel();
+      updateTeacherUI();
+      // Sync model select
+      modelSelect.value = state.model;
+      setTimeout(function () { inputEl.focus(); }, 150);
+    }
+
+    function closePanel() {
+      state.open = false;
+      panel.classList.remove('vcc-ai-open');
+      panel.classList.add('vcc-ai-hidden');
+      trigger.classList.remove('vcc-ai-trigger-open');
+      closeSettings();
+    }
+
+    // ── Auto-resize textarea ───────────────────────────────────────────────
+    inputEl.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    // ── Event listeners ────────────────────────────────────────────────────
+    trigger.addEventListener('click', function () {
+      state.open ? closePanel() : openPanel();
+    });
+
+    closeBtn.addEventListener('click', closePanel);
+
+    teacherBtn.addEventListener('click', function () {
+      state.teacherMode = !state.teacherMode;
+      persist();
+      updateTeacherUI();
+    });
+
+    settingsBtn.addEventListener('click', function () {
+      state.showSettings ? closeSettings() : openSettings();
+    });
+
+    saveSettingsBtn.addEventListener('click', saveSettings);
+
+    clearChatBtn.addEventListener('click', function () {
+      state.history = [];
+      msgArea.innerHTML = '<div class="vcc-ai-welcome"><p class="vcc-ai-welcome-title">Chat cleared!</p><p class="vcc-ai-welcome-sub">Ask me anything about your current challenge or any coding topic.</p></div>';
+    });
+
+    modelSelect.addEventListener('change', function () {
+      state.model = this.value;
+      persist();
+      if (state.model === 'custom') openSettings();
+    });
+
+    sendBtn.addEventListener('click', function () { sendMessage(); });
+
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Keyboard shortcut: Ctrl+Shift+A
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        state.open ? closePanel() : openPanel();
+      }
+    });
+
+    // Close on backdrop click (outside panel)
+    document.addEventListener('click', function (e) {
+      if (state.open && !panel.contains(e.target) && !trigger.contains(e.target)) {
+        closePanel();
+      }
+    });
+
+    // Initial UI sync
+    updateTeacherUI();
+    modelSelect.value = state.model;
+
+  }());

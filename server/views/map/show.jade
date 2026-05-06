@@ -1,16 +1,18 @@
 extends ../layout-wide
 block content
     .mapWrapper
-        .text-center.map-fixed-header
-            p Challenges required for certifications are marked with a *
+        .text-center.map-fixed-header.vcc-map-header
+            .vcc-map-brand ✦ Vonix Code Camp — Full Curriculum
+            p.vcc-map-hint Challenges required for certifications are marked with
+                strong  *
             .row.map-buttons
-                button.center-block.btn.btn-block.btn-primary.active#showAll Collapse all challenges
+                button.center-block.btn.vcc-btn-map.active#showAll Collapse All
             .row.map-buttons
-                .input-group
-                    input#map-filter.form-control(type="text" placeholder="Type a challenge name" autocomplete="off" value="")
-                    span.input-group-addon
+                .input-group.vcc-search-group
+                    input#map-filter.form-control.vcc-map-search(type="text" placeholder="Search challenges..." autocomplete="off" value="")
+                    span.input-group-addon.vcc-search-addon
                         i.fa.fa-search
-            hr
+            hr.vcc-map-hr
             include ../partials/flash
         #accordion.map-accordion
           #noneFound No results found. Happy Coding!

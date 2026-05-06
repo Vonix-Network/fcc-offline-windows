@@ -93,7 +93,10 @@ module.exports = function(User) {
   });
 
   User.beforeRemote('create', function({ req, res }, _, next) {
-    req.body.username = 'fcc' + uuid.v4().slice(0, 8);
+    const emailPrefix = req.body.email
+      ? req.body.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14)
+      : '';
+    req.body.username = (emailPrefix || 'user') + uuid.v4().replace(/-/g, '').slice(0, 6);
     if (!req.body.email) {
       return next();
     }
@@ -137,7 +140,7 @@ module.exports = function(User) {
       url = `http://${host}:${port}/reset-password?access_token=${token}`;
     } else {
       url =
-        `http://freecodecamp.com/reset-password?access_token=${token}`;
+        `https://vonix.network/reset-password?access_token=${token}`;
     }
 
     // the email of the requested user
@@ -147,18 +150,9 @@ module.exports = function(User) {
     // requires AccessToken.belongsTo(User)
     var mailOptions = {
       to: info.email,
-      from: 'Team@freecodecamp.com',
-      subject: 'Password Reset Request',
-      text: `
-        Hello,\n\n
-        This email is confirming that you requested to
-        reset your password for your Free Code Camp account.
-        This is your email: ${ info.email }.
-        Go to ${ url } to reset your password.
-        \n
-        Happy Coding!
-        \n
-      `
+      from: 'no-reply@vonix.network',
+      subject: 'Vonix Code Camp — Password Reset',
+      text: `Hello,\n\nYou requested a password reset for your Vonix Code Camp account (${info.email}).\n\nClick the link below to reset your password:\n${url}\n\nIf you did not request this, you can safely ignore this email.\n\n— The Vonix Team`
     };
 
     return User.app.models.Email.send(mailOptions, function(err) {

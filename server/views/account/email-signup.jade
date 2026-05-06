@@ -2,16 +2,19 @@ extends ../layout
 block content
     script.
       var challengeName = 'Email Signup'
-    h2.text-center Sign up with an email address here:
-    form.form-horizontal(method='POST', action='/api/users', name="signupForm")
-        .row
-            .col-sm-6.col-sm-offset-3
-              input(type='hidden', name='_csrf', value=_csrf)
-              .form-group
-                  input.input-lg.form-control(type='email', name='email', id='email', placeholder='email', autofocus, required, autocomplete="off")
-              .form-group
-                  input.input-lg.form-control(type='password', name='password', id='password', placeholder='password', required, pattern=".{8,50}", title="Must be at least 8 characters and no longer than 50 characters.")
-              .form-group
-                  button.btn.btn-lg.btn-primary.btn-block(type='submit')
-                    span.ion-person-add
-                    | Signup
+    .vcc-auth-wrap
+      .vcc-auth-box
+        .vcc-auth-logo ✦
+        h2.vcc-auth-title Create your account
+        p.vcc-auth-sub Join Vonix Code Camp and start learning for free.
+        form.vcc-auth-form(method='POST', action='/api/users', name='signupForm')
+          input(type='hidden', name='_csrf', value=_csrf)
+          .vcc-auth-field
+            label.vcc-auth-label(for='email') Email address
+            input.vcc-auth-input(type='email', name='email', id='email', placeholder='you@example.com', autofocus, required, autocomplete='off')
+          .vcc-auth-field
+            label.vcc-auth-label(for='password') Password
+            input.vcc-auth-input(type='password', name='password', id='password', placeholder='At least 8 characters', required, pattern='.{8,50}', title='Must be 8–50 characters')
+          button.vcc-auth-btn(type='submit') Create Account
+          p.vcc-auth-switch Already have an account?
+            a(href='/email-signin')  Sign in

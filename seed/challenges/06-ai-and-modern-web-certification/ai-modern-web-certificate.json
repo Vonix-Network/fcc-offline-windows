@@ -1,0 +1,59 @@
+{
+  "name": "AI and Modern Web Projects",
+  "order": 4,
+  "time": "40 hours",
+  "helpRoom": "HelpJavaScript",
+  "challenges": [
+    {
+      "id": "2026ai004b001c0040001def1",
+      "title": "Build an AI-Powered Chat Interface",
+      "description": [
+        "Build a functional chat interface that communicates with an AI API (use any available: OpenAI, Anthropic, Ollama for local models, or a mock/simulated backend).",
+        "User Story: I can type a message and send it to an AI assistant that responds.",
+        "User Story: The chat displays a conversation history with clear visual distinction between user and assistant messages.",
+        "User Story: I can see a loading/typing indicator while waiting for the AI response.",
+        "User Story: I can clear the conversation and start fresh.",
+        "Bonus User Story: I can configure a system prompt that sets the assistant's personality/role.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ai004b002c0040001def2",
+      "title": "Build a Semantic Search Engine",
+      "description": [
+        "Build a client-side semantic search application that searches a dataset using cosine similarity on pre-computed (or simplified) embeddings.",
+        "User Story: I can enter a search query and get results ranked by semantic relevance (not just keyword matching).",
+        "User Story: I can see a similarity score next to each result.",
+        "User Story: I can search over a dataset of at least 20 items (book descriptions, article summaries, code snippets, etc.).",
+        "Hint: For this project, you may use a simplified TF-IDF representation as your 'embedding' if a real embedding API is not available.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026ai004b003c0040001def3",
+      "title": "Claim your AI and Modern Web Certification",
+      "description": [
+        "Congratulations on completing the AI and Modern Web certification projects!",
+        "You've learned TypeScript, Modern React with hooks, Next.js patterns, AI fundamentals, prompt engineering, RAG, and AI agent tool patterns."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "checkpoint",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

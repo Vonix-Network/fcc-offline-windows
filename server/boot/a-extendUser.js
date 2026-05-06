@@ -57,43 +57,44 @@ module.exports = function(app) {
     next();
   });
 
-  // send welcome email to new camper
+  // Log user in immediately after registration, then send welcome email
+  // as fire-and-forget so email failures never block sign-up.
   User.afterRemote('create', function({ req, res }, user, next) {
-    debug('user created, sending email');
-    if (!user.email || !isEmail(user.email)) { return next(); }
+    debug('user created');
     const redirect = req.session && req.session.returnTo ?
       req.session.returnTo :
       '/';
 
-    var mailOptions = {
-      type: 'email',
-      to: user.email,
-      from: 'Team@freecodecamp.com',
-      subject: 'Welcome to Free Code Camp!',
-      redirect: '/',
-      text: [
-        'Greetings from San Francisco!\n\n',
-        'Thank you for joining our community.\n',
-        'Feel free to email us at this address if you have ',
-        'any questions about Free Code Camp.\n',
-        'And if you have a moment, check out our blog: ',
-        'medium.freecodecamp.com.\n\n',
-        'Good luck with the challenges!\n\n',
-        '- the Free Code Camp Team'
-      ].join('')
-    };
-
-    debug('sending welcome email');
-    return Email.send(mailOptions, function(err) {
-      if (err) { return next(err); }
-      return req.logIn(user, function(err) {
-        if (err) { return next(err); }
-
-        req.flash('success', {
-          msg: [ "Welcome to Free Code Camp! We've created your account." ]
-        });
-        return res.redirect(redirect);
+    // Fire-and-forget welcome email – do not block login on failure
+    if (user.email && isEmail(user.email)) {
+      var mailOptions = {
+        type: 'email',
+        to: user.email,
+        from: 'no-reply@vonix.network',
+        subject: 'Welcome to Vonix Code Camp!',
+        redirect: '/',
+        text: [
+          'Welcome to Vonix Code Camp!\n\n',
+          'Your account has been created successfully.\n',
+          'You can now sign in and start working through the curriculum:\n',
+          'https://vonix.network\n\n',
+          'If you have any questions, feel free to reach out.\n\n',
+          'Happy coding!\n',
+          '— The Vonix Team'
+        ].join('')
+      };
+      Email.send(mailOptions, function(err) {
+        if (err) { debug('welcome email failed (non-fatal): %s', err.message); }
       });
+    }
+
+    // Log the user in regardless of email status
+    return req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      req.flash('success', {
+        msg: [ "Welcome to Vonix Code Camp! Your account is ready." ]
+      });
+      return res.redirect(redirect);
     });
   });
 };

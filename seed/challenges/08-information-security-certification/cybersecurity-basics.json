@@ -1,0 +1,153 @@
+{
+  "name": "Cybersecurity Basics",
+  "order": 1,
+  "time": "10 hours",
+  "helpRoom": "HelpBackEnd",
+  "challenges": [
+    {
+      "id": "2026sec01b001c0010001def1",
+      "title": "Password Hashing: Never Store Plaintext Passwords",
+      "description": [
+        "One of the most critical security rules: <strong>never store plaintext passwords</strong>. Passwords must be hashed using a one-way cryptographic function before storage.",
+        "<blockquote>// Node.js with bcrypt (industry standard 2026)\nconst bcrypt = require('bcrypt');\nconst SALT_ROUNDS = 12; // cost factor: higher = slower = more secure\n\n// Hashing (on registration)\nasync function hashPassword(plaintext) {\n  return bcrypt.hash(plaintext, SALT_ROUNDS);\n}\n\n// Verifying (on login)\nasync function verifyPassword(plaintext, hash) {\n  return bcrypt.compare(plaintext, hash);\n}\n\n// Why NOT to use MD5/SHA1:\n// 'password123' -> MD5 -> '482c811da5d5b4bc6d497ffa98491e38'\n// Rainbow tables instantly crack common MD5 hashes!\n// bcrypt adds a unique salt + is computationally expensive by design</blockquote>",
+        "Modern password hashing algorithms: <strong>bcrypt</strong> (most common), <strong>Argon2</strong> (winner of Password Hashing Competition, recommended for new apps), <strong>scrypt</strong> (memory-hard, used by many cryptocurrencies).",
+        "A <strong>salt</strong> is random data added before hashing to ensure identical passwords produce different hashes, defeating pre-computed rainbow table attacks.",
+        "<h4>Instructions</h4>",
+        "Implement a simple (non-cryptographic) password strength validator <code>checkPasswordStrength</code> that returns <code>'weak'</code>, <code>'medium'</code>, or <code>'strong'</code> based on: length >= 8 required, strong requires >= 12 chars AND uppercase AND lowercase AND number AND special char."
+      ],
+      "challengeSeed": [
+        "function checkPasswordStrength(password) {",
+        "  var hasUpper = /[A-Z]/.test(password);",
+        "  var hasLower = /[a-z]/.test(password);",
+        "  var hasDigit = /[0-9]/.test(password);",
+        "  var hasSpecial = /[^A-Za-z0-9]/.test(password);",
+        "  // Return 'weak', 'medium', or 'strong'",
+        "  // weak: < 8 chars",
+        "  // strong: >= 12 chars AND all four character types",
+        "  // medium: everything else",
+        "}"
+      ],
+      "solutions": [
+        "function checkPasswordStrength(password) {\n  if (password.length < 8) return 'weak';\n  var hasUpper = /[A-Z]/.test(password);\n  var hasLower = /[a-z]/.test(password);\n  var hasDigit = /[0-9]/.test(password);\n  var hasSpecial = /[^A-Za-z0-9]/.test(password);\n  if (password.length >= 12 && hasUpper && hasLower && hasDigit && hasSpecial) return 'strong';\n  return 'medium';\n}"
+      ],
+      "tests": [
+        "assert(checkPasswordStrength('abc') === 'weak', 'message: Passwords shorter than 8 chars should be weak.');",
+        "assert(checkPasswordStrength('password123') === 'medium', 'message: 11 chars, no special = medium.');",
+        "assert(checkPasswordStrength('Str0ng!Pass#2026') === 'strong', 'message: >= 12 chars with all types should be strong.');",
+        "assert(checkPasswordStrength('Password1!') === 'medium', 'message: Meets criteria but < 12 chars = medium.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sec01b002c0010001def2",
+      "title": "XSS Prevention: Sanitizing User Input",
+      "description": [
+        "<strong>Cross-Site Scripting (XSS)</strong> is one of the most common web vulnerabilities. It occurs when an attacker injects malicious scripts into content served to other users.",
+        "<blockquote>// XSS Attack Example:\n// User submits: &lt;script&gt;document.cookie&lt;/script&gt;\n// App displays it unescaped in HTML\n// Every visitor's browser executes the script!\n\n// Prevention: HTML entity encoding\nfunction escapeHTML(str) {\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#x27;');\n}\n\n// &lt;script&gt; is displayed as text, not executed\nescapeHTML('&lt;script&gt;alert(1)&lt;/script&gt;');\n// Outputs: '&lt;script&gt;alert(1)&lt;/script&gt;'</blockquote>",
+        "Types of XSS: <strong>Stored XSS</strong> (injected content saved to DB, served to all users), <strong>Reflected XSS</strong> (payload in URL parameter reflected back), <strong>DOM-based XSS</strong> (client-side script writes unsanitized data to DOM).",
+        "Modern defenses: <code>Content-Security-Policy</code> headers, React/Vue automatic escaping, <code>textContent</code> instead of <code>innerHTML</code>, input validation libraries like DOMPurify.",
+        "<h4>Instructions</h4>",
+        "Implement <code>escapeHTML</code> that converts the five dangerous characters (<code>&</code>, <code><</code>, <code>></code>, <code>\"</code>, <code>'</code>) to their HTML entity equivalents, preventing XSS when displaying user content."
+      ],
+      "challengeSeed": [
+        "function escapeHTML(str) {",
+        "  // Replace & < > \" ' with HTML entities",
+        "  // Order matters: & must be replaced first!",
+        "}"
+      ],
+      "solutions": [
+        "function escapeHTML(str) {\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#x27;');\n}"
+      ],
+      "tests": [
+        "assert(escapeHTML('<script>') === '&lt;script&gt;', 'message: < and > should be escaped.');",
+        "assert(escapeHTML('\"quoted\"') === '&quot;quoted&quot;', 'message: Double quotes should be escaped.');",
+        "assert(escapeHTML('a & b') === 'a &amp; b', 'message: Ampersand should be escaped.');",
+        "assert(escapeHTML(\"it's\") === 'it&#x27;s', 'message: Single quotes should be escaped.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sec01b003c0010001def3",
+      "title": "JWT Authentication: Stateless Identity Tokens",
+      "description": [
+        "<strong>JSON Web Tokens (JWT)</strong> are the standard for stateless authentication in 2026 REST APIs and SPAs. A JWT contains a header, payload (claims), and signature — all base64-encoded and dot-separated.",
+        "<blockquote>// JWT structure: header.payload.signature\n// eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIn0.signature\n\n// Node.js with jsonwebtoken\nconst jwt = require('jsonwebtoken');\nconst SECRET = process.env.JWT_SECRET;\n\n// Sign (create token)\nconst token = jwt.sign(\n  { userId: 1, role: 'admin' },  // payload\n  SECRET,\n  { expiresIn: '24h' }           // options\n);\n\n// Verify\ntry {\n  const decoded = jwt.verify(token, SECRET);\n  console.log(decoded.userId); // 1\n} catch (err) {\n  // TokenExpiredError or JsonWebTokenError\n  res.status(401).json({ error: 'Invalid token' });\n}</blockquote>",
+        "JWT best practices: use short expiry (<24h) + refresh tokens, store in httpOnly cookies (not localStorage) to prevent XSS theft, validate on every request, include only necessary claims in payload.",
+        "<h4>Instructions</h4>",
+        "Implement a simplified token system: <code>createToken(payload, secret)</code> returns a base64-encoded token string, and <code>verifyToken(token, secret)</code> decodes and returns the payload, or returns <code>null</code> if the secret doesn't match."
+      ],
+      "challengeSeed": [
+        "// Simplified (non-cryptographic) token for learning purposes",
+        "function createToken(payload, secret) {",
+        "  var data = JSON.stringify(payload);",
+        "  var encoded = btoa(data);",
+        "  var signature = btoa(secret + encoded); // simplified 'signing'",
+        "  return encoded + '.' + signature;",
+        "}",
+        "",
+        "function verifyToken(token, secret) {",
+        "  var parts = token.split('.');",
+        "  if (parts.length !== 2) return null;",
+        "  var encoded = parts[0];",
+        "  var signature = parts[1];",
+        "  // Verify signature and decode payload",
+        "}"
+      ],
+      "solutions": [
+        "function createToken(payload, secret) {\n  var data = JSON.stringify(payload);\n  var encoded = btoa(data);\n  var signature = btoa(secret + encoded);\n  return encoded + '.' + signature;\n}\nfunction verifyToken(token, secret) {\n  var parts = token.split('.');\n  if (parts.length !== 2) return null;\n  var encoded = parts[0], signature = parts[1];\n  var expectedSig = btoa(secret + encoded);\n  if (signature !== expectedSig) return null;\n  try { return JSON.parse(atob(encoded)); } catch(e) { return null; }\n}"
+      ],
+      "tests": [
+        "var token = createToken({userId: 1, role: 'admin'}, 'mysecret'); assert(typeof token === 'string' && token.includes('.'), 'message: Token should be a string with a dot separator.');",
+        "var payload = verifyToken(token, 'mysecret'); assert(payload && payload.userId === 1, 'message: verifyToken should decode the userId.');",
+        "assert(verifyToken(token, 'wrongsecret') === null, 'message: Wrong secret should return null.');",
+        "assert(verifyToken('invalid.token', 'mysecret') === null, 'message: Tampered token should return null.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026sec01b004c0010001def4",
+      "title": "Rate Limiting: Protecting APIs from Abuse",
+      "description": [
+        "<strong>Rate limiting</strong> restricts how many requests a client can make in a time window, protecting against brute-force attacks, DoS, scraping, and API abuse.",
+        "<blockquote>// Express rate limiter (express-rate-limit)\nconst rateLimit = require('express-rate-limit');\n\nconst loginLimiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 10,                   // max 10 login attempts per 15 min\n  message: { error: 'Too many login attempts, try again later' },\n  standardHeaders: true,     // Return limit info in RateLimit-* headers\n  legacyHeaders: false\n});\n\napp.post('/login', loginLimiter, loginHandler);\n\n// Different limits for different endpoints:\n// Public API: 100 req/min\n// Auth endpoints: 10 req/15min (brute force protection)\n// AI endpoints: 20 req/min (expensive inference)</blockquote>",
+        "Rate limiting strategies: <strong>fixed window</strong> (reset counter every N seconds), <strong>sliding window</strong> (rolling N-second lookback), <strong>token bucket</strong> (tokens replenish over time), <strong>leaky bucket</strong> (queue-based, smooths bursts).",
+        "<h4>Instructions</h4>",
+        "Implement a <strong>fixed window rate limiter</strong> factory function. <code>createRateLimiter(maxRequests, windowMs)</code> returns a function that takes a <code>clientId</code>. It returns <code>true</code> if the request is allowed, <code>false</code> if rate limited."
+      ],
+      "challengeSeed": [
+        "function createRateLimiter(maxRequests, windowMs) {",
+        "  var clients = {};",
+        "  return function isAllowed(clientId) {",
+        "    var now = Date.now();",
+        "    if (!clients[clientId] || now - clients[clientId].windowStart >= windowMs) {",
+        "      clients[clientId] = { count: 1, windowStart: now };",
+        "      return true;",
+        "    }",
+        "    // Increment count; return false if over limit",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function createRateLimiter(maxRequests, windowMs) {\n  var clients = {};\n  return function isAllowed(clientId) {\n    var now = Date.now();\n    if (!clients[clientId] || now - clients[clientId].windowStart >= windowMs) {\n      clients[clientId] = { count: 1, windowStart: now };\n      return true;\n    }\n    clients[clientId].count++;\n    return clients[clientId].count <= maxRequests;\n  };\n}"
+      ],
+      "tests": [
+        "var limiter = createRateLimiter(3, 60000); assert(limiter('user1') === true, 'message: First request should be allowed.'); assert(limiter('user1') === true, 'message: Second request should be allowed.'); assert(limiter('user1') === true, 'message: Third request should be allowed.');",
+        "assert(limiter('user1') === false, 'message: Fourth request should be rate limited.');",
+        "assert(limiter('user2') === true, 'message: A different client should have its own counter.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

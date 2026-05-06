@@ -1,0 +1,171 @@
+{
+  "name": "Modern React and Next.js",
+  "order": 2,
+  "time": "12 hours",
+  "helpRoom": "HelpJavaScript",
+  "challenges": [
+    {
+      "id": "2026re001b001c0010001def1",
+      "title": "React Hooks: useState and Functional Components",
+      "description": [
+        "Modern React (since v16.8) uses <strong>hooks</strong> instead of class components. In 2026, all new React code is written with functional components and hooks.",
+        "<code>useState</code> is the most fundamental hook — it gives a functional component its own local state:",
+        "<blockquote>// Modern React with useState\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0); // initial value = 0\n\n  return (\n    &lt;div&gt;\n      &lt;p&gt;Count: {count}&lt;/p&gt;\n      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Increment&lt;/button&gt;\n      &lt;button onClick={() =&gt; setCount(count - 1)}&gt;Decrement&lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</blockquote>",
+        "<code>useState</code> returns an array with two elements: the current state value and a setter function. Calling the setter triggers a re-render with the new value.",
+        "Hooks follow two rules: (1) only call hooks at the top level (not inside loops/conditions), and (2) only call hooks from React functions.",
+        "<h4>Instructions</h4>",
+        "Implement a <code>createState</code> factory function that mimics the behavior of React's <code>useState</code>. It takes an initial value and returns an array <code>[getValue, setValue]</code> where <code>getValue()</code> returns current state and <code>setValue(newVal)</code> updates it. This simulates how React tracks state internally."
+      ],
+      "challengeSeed": [
+        "// Simulates React's useState hook mechanism",
+        "function createState(initialValue) {",
+        "  var state = initialValue;",
+        "  function getValue() {",
+        "    // return current state",
+        "  }",
+        "  function setValue(newValue) {",
+        "    // update state",
+        "  }",
+        "  return [getValue, setValue];",
+        "}"
+      ],
+      "solutions": [
+        "function createState(initialValue) {\n  var state = initialValue;\n  function getValue() { return state; }\n  function setValue(newValue) { state = newValue; }\n  return [getValue, setValue];\n}"
+      ],
+      "tests": [
+        "var pair = createState(0); var get = pair[0]; var set = pair[1]; assert(get() === 0, 'message: Initial value should be 0.');",
+        "set(5); assert(get() === 5, 'message: After setValue(5), getValue() should return 5.');",
+        "set(set(get() + 1)); assert(get() !== undefined, 'message: getValue() should always return the current state.');",
+        "var pair2 = createState('hello'); assert(pair2[0]() === 'hello', 'message: Should work with string initial values.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026re001b002c0010001def2",
+      "title": "React Hooks: useEffect and Side Effects",
+      "description": [
+        "<code>useEffect</code> is React's hook for managing <strong>side effects</strong> — anything that reaches outside the component: data fetching, subscriptions, timers, DOM manipulation, and API calls.",
+        "<blockquote>import React, { useState, useEffect } from 'react';\n\nfunction UserProfile({ userId }) {\n  const [user, setUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() =&gt; {\n    // Runs after every render where userId changed\n    setLoading(true);\n    fetch(`/api/users/${userId}`)\n      .then(r =&gt; r.json())\n      .then(data =&gt; {\n        setUser(data);\n        setLoading(false);\n      });\n\n    // Cleanup function (like componentWillUnmount)\n    return () =&gt; { /* cancel fetch if needed */ };\n  }, [userId]); // dependency array — re-run only when userId changes\n\n  if (loading) return &lt;p&gt;Loading...&lt;/p&gt;;\n  return &lt;h1&gt;{user.name}&lt;/h1&gt;;\n}</blockquote>",
+        "The <strong>dependency array</strong> controls when the effect runs: empty <code>[]</code> = run once on mount, <code>[dep1, dep2]</code> = run when those values change, no array = run after every render.",
+        "<h4>Instructions</h4>",
+        "Write a function <code>createEffect</code> that mimics the basic behavior of useEffect: it takes an <code>effect</code> function and a <code>deps</code> array. Calling <code>runEffect()</code> should execute the effect only if the deps have changed since the last run. Return the last cleanup function if deps haven't changed."
+      ],
+      "challengeSeed": [
+        "// Simulates React's useEffect dependency tracking",
+        "function createEffect(effect, deps) {",
+        "  var prevDeps = null;",
+        "  var cleanup = null;",
+        "  return function runEffect() {",
+        "    // Check if deps changed (use JSON.stringify for comparison)",
+        "    var depsChanged = prevDeps === null || JSON.stringify(prevDeps) !== JSON.stringify(deps);",
+        "    if (depsChanged) {",
+        "      if (typeof cleanup === 'function') cleanup();",
+        "      // run effect, store any cleanup it returns",
+        "      // update prevDeps",
+        "    }",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function createEffect(effect, deps) {\n  var prevDeps = null;\n  var cleanup = null;\n  return function runEffect() {\n    var depsChanged = prevDeps === null || JSON.stringify(prevDeps) !== JSON.stringify(deps);\n    if (depsChanged) {\n      if (typeof cleanup === 'function') cleanup();\n      cleanup = effect();\n      prevDeps = deps.slice();\n    }\n  };\n}"
+      ],
+      "tests": [
+        "var ran = 0; var run = createEffect(function() { ran++; }, [1, 2]); run(); assert(ran === 1, 'message: Effect should run on first call.');",
+        "run(); assert(ran === 1, 'message: Effect should NOT run again when deps are the same.');",
+        "var ran2 = 0; var deps = [1]; var run2 = createEffect(function() { ran2++; }, deps); run2(); deps[0] = 2; run2 = createEffect(function() { ran2++; }, deps); run2(); assert(ran2 === 2, 'message: Effect should run again when deps change.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026re001b003c0010001def3",
+      "title": "Custom React Hooks: Encapsulating Logic",
+      "description": [
+        "<strong>Custom hooks</strong> are one of React's most powerful features — they let you extract component logic into reusable functions. By convention, custom hooks always start with <code>use</code>.",
+        "<blockquote>// Custom hook: useLocalStorage\nimport { useState } from 'react';\n\nfunction useLocalStorage(key, initialValue) {\n  const [storedValue, setStoredValue] = useState(() =&gt; {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch { return initialValue; }\n  });\n\n  const setValue = (value) =&gt; {\n    setStoredValue(value);\n    localStorage.setItem(key, JSON.stringify(value));\n  };\n\n  return [storedValue, setValue];\n}\n\n// Usage in any component:\nconst [theme, setTheme] = useLocalStorage('theme', 'light');</blockquote>",
+        "Other common custom hooks: <code>useFetch</code> (data fetching + loading/error states), <code>useDebounce</code> (delayed search inputs), <code>useWindowSize</code> (responsive logic), <code>useWebSocket</code> (real-time connections).",
+        "<h4>Instructions</h4>",
+        "Write a function <code>useDebounce</code> (no React needed — pure JS) that takes a <code>fn</code> function and a <code>delay</code> in ms, and returns a new function that only calls <code>fn</code> after <code>delay</code> ms of inactivity. Calling the debounced function repeatedly should reset the timer each time."
+      ],
+      "challengeSeed": [
+        "// Custom hook logic: debounce (used in search inputs, autocomplete, etc.)",
+        "function useDebounce(fn, delay) {",
+        "  var timer = null;",
+        "  return function() {",
+        "    var args = arguments;",
+        "    // Clear previous timer",
+        "    // Set new timer that calls fn after delay",
+        "  };",
+        "}"
+      ],
+      "solutions": [
+        "function useDebounce(fn, delay) {\n  var timer = null;\n  return function() {\n    var args = arguments;\n    clearTimeout(timer);\n    timer = setTimeout(function() {\n      fn.apply(null, args);\n    }, delay);\n  };\n}"
+      ],
+      "tests": [
+        "var called = 0; var db = useDebounce(function() { called++; }, 50); db(); db(); db(); setTimeout(function() { assert(called === 1, 'message: Should only call fn once after rapid calls.'); }, 100);",
+        "assert(typeof useDebounce(function(){}, 100) === 'function', 'message: <code>useDebounce</code> should return a function.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026re001b004c0010001def4",
+      "title": "Next.js: Server-Side Rendering and the App Router",
+      "description": [
+        "<strong>Next.js</strong> is the leading React framework in 2026, used by companies like Vercel, Netflix, TikTok, and Twitch. It extends React with: server-side rendering (SSR), static generation (SSG), the App Router, and React Server Components.",
+        "<blockquote>// Next.js App Router file: app/users/[id]/page.tsx\nimport { notFound } from 'next/navigation';\n\n// Server Component - runs on the server, no 'use client' needed\nasync function UserPage({ params }: { params: { id: string } }) {\n  const user = await fetch(`https://api.example.com/users/${params.id}`, {\n    next: { revalidate: 3600 } // cache for 1 hour\n  }).then(r =&gt; r.json());\n\n  if (!user) notFound();\n\n  return (\n    &lt;main&gt;\n      &lt;h1&gt;{user.name}&lt;/h1&gt;\n      &lt;p&gt;{user.email}&lt;/p&gt;\n    &lt;/main&gt;\n  );\n}</blockquote>",
+        "Key Next.js concepts for 2026: <strong>Server Components</strong> (default, run on server, zero JS to client), <strong>Client Components</strong> (<code>'use client'</code> directive, run in browser), <strong>Partial Prerendering</strong> (static shell + dynamic islands), and <strong>Server Actions</strong> (form submissions handled server-side).",
+        "<h4>Instructions</h4>",
+        "Write a function <code>createRouter</code> that takes a <code>routes</code> object mapping path patterns to handler functions, and returns a <code>navigate(path)</code> function. It should match exact paths and extract dynamic segments (e.g., <code>/users/:id</code>). Return <code>null</code> if no route matches."
+      ],
+      "challengeSeed": [
+        "// Simulates Next.js App Router path matching",
+        "function createRouter(routes) {",
+        "  return function navigate(path) {",
+        "    for (var pattern in routes) {",
+        "      var params = matchRoute(pattern, path);",
+        "      if (params !== null) {",
+        "        return routes[pattern](params);",
+        "      }",
+        "    }",
+        "    return null;",
+        "  };",
+        "}",
+        "",
+        "function matchRoute(pattern, path) {",
+        "  var patternParts = pattern.split('/');",
+        "  var pathParts = path.split('/');",
+        "  if (patternParts.length !== pathParts.length) return null;",
+        "  var params = {};",
+        "  for (var i = 0; i < patternParts.length; i++) {",
+        "    if (patternParts[i].startsWith(':')) {",
+        "      params[patternParts[i].slice(1)] = pathParts[i];",
+        "    } else if (patternParts[i] !== pathParts[i]) {",
+        "      return null;",
+        "    }",
+        "  }",
+        "  return params;",
+        "}"
+      ],
+      "solutions": [
+        "function createRouter(routes) {\n  return function navigate(path) {\n    for (var pattern in routes) {\n      var params = matchRoute(pattern, path);\n      if (params !== null) return routes[pattern](params);\n    }\n    return null;\n  };\n}\nfunction matchRoute(pattern, path) {\n  var pp = pattern.split('/'), pa = path.split('/');\n  if (pp.length !== pa.length) return null;\n  var params = {};\n  for (var i = 0; i < pp.length; i++) {\n    if (pp[i].startsWith(':')) params[pp[i].slice(1)] = pa[i];\n    else if (pp[i] !== pa[i]) return null;\n  }\n  return params;\n}"
+      ],
+      "tests": [
+        "var router = createRouter({ '/users/:id': function(p) { return 'user:' + p.id; }, '/about': function() { return 'about'; } }); assert(router('/about') === 'about', 'message: Exact route /about should match.');",
+        "assert(router('/users/42') === 'user:42', 'message: Dynamic route /users/:id should extract id=42.');",
+        "assert(router('/unknown') === null, 'message: Unknown path should return null.');"
+      ],
+      "type": "waypoint",
+      "challengeType": 1,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

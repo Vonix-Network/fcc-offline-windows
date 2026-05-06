@@ -1,0 +1,58 @@
+{
+  "name": "Python and Data Science Projects",
+  "order": 4,
+  "time": "40 hours",
+  "helpRoom": "HelpPython",
+  "challenges": [
+    {
+      "id": "2026py004b001c0040001def1",
+      "title": "Build a Data Analysis Dashboard",
+      "description": [
+        "Build a web-based data analysis dashboard that loads a dataset, computes descriptive statistics, and displays visualizations.",
+        "User Story: I can upload or provide a dataset (CSV-like structure), and see a summary including count, mean, median, mode, and standard deviation for each numeric column.",
+        "User Story: I can filter the dataset by selecting a column value, and the statistics update to reflect the filtered data.",
+        "User Story: I can see at least one chart (bar, line, or histogram) that updates based on my filter selection.",
+        "<a href='http://codepen.io/' target='_blank'>Here is a suggested CodePen template to use</a>.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py004b002c0040001def2",
+      "title": "Build a Predictive Model Explainer",
+      "description": [
+        "Build an interactive tool that demonstrates how a simple machine learning model makes predictions.",
+        "User Story: I can input feature values (like age, income, hours studied) and see a prediction output from a simple model (linear regression formula or decision tree logic you implement in JS).",
+        "User Story: I can see which input features most influence the output (feature importance visualization).",
+        "User Story: I can adjust model parameters (weights/thresholds) and see how predictions change in real time.",
+        "The goal of this project is to build intuition about how ML models work — not to use an actual ML library.",
+        "Remember to use Read-Search-Ask if you get stuck."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "zipline",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    },
+    {
+      "id": "2026py004b003c0040001def3",
+      "title": "Claim your Python and Data Science Certification",
+      "description": [
+        "Congratulations on completing all the Python and Data Science projects!",
+        "Once you've completed the required projects above, you can claim your Python and Data Science Certification."
+      ],
+      "challengeSeed": [],
+      "tests": [],
+      "type": "checkpoint",
+      "challengeType": 3,
+      "releasedOn": "Jan January 01, 2026",
+      "markNew": true
+    }
+  ]
+}

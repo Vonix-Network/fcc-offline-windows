@@ -1221,3 +1221,1385 @@ code {
 @import "toastr.less";
 @import "map.less";
 @import "wiki.less";
+
+// ============================================================
+//  VONIX CODE CAMP — Design System
+//  Codecademy-inspired modern UI, May 2026
+// ============================================================
+
+// ── CSS Custom Properties (via LESS variables) ─────────────
+@vcc-navy:        #0f1117;
+@vcc-navy-2:      #1a1d2e;
+@vcc-navy-3:      #252840;
+@vcc-card-bg:     #1e2235;
+@vcc-border:      #2e3150;
+@vcc-purple:      #7b66ff;
+@vcc-purple-2:    #9b87ff;
+@vcc-teal:        #00d4aa;
+@vcc-teal-2:      #00f0c0;
+@vcc-text:        #e8eaf0;
+@vcc-text-muted:  #8b90a7;
+@vcc-white:       #ffffff;
+
+// ── Global Body Override ───────────────────────────────────
+html, body, div, span, a, li, td, th, p, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', 'Lato', sans-serif !important;
+}
+
+// ── Navbar — Vonix Code Camp ───────────────────────────────
+.vcc-navbar.navbar {
+  background-color: @vcc-navy !important;
+  border-bottom: 1px solid @vcc-border;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  min-height: 60px;
+  height: 60px;
+
+  .navbar-header { background-color: @vcc-navy; }
+
+  .navbar-toggle {
+    border-color: @vcc-border;
+    color: @vcc-text;
+    margin-top: 12px;
+    &:hover { background-color: @vcc-navy-2; }
+  }
+}
+
+.vcc-brand {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 15px !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: @vcc-white !important;
+  text-decoration: none !important;
+  &:hover { color: @vcc-purple-2 !important; text-decoration: none !important; }
+}
+.vcc-logo-icon {
+  color: @vcc-purple;
+  font-size: 18px;
+  display: inline-block;
+}
+.vcc-logo-text {
+  color: @vcc-white;
+  letter-spacing: -0.3px;
+}
+.vcc-logo-accent {
+  color: @vcc-purple-2;
+  font-weight: 400;
+}
+
+.vcc-nav-link {
+  color: @vcc-text-muted !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 20px 14px !important;
+  transition: color 0.2s ease !important;
+  &:hover {
+    color: @vcc-white !important;
+    background-color: transparent !important;
+  }
+  .fa { margin-right: 4px; font-size: 13px; }
+}
+
+.vcc-btn-nav {
+  background: @vcc-purple;
+  color: @vcc-white !important;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-top: 14px;
+  margin-right: 4px;
+  transition: background 0.2s ease, transform 0.1s ease;
+  &:hover {
+    background: @vcc-purple-2 !important;
+    color: @vcc-white !important;
+    transform: translateY(-1px);
+  }
+}
+
+.vcc-points-badge {
+  display: inline-flex;
+  align-items: center;
+  color: @vcc-teal !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: 20px 12px !important;
+  &:hover { color: @vcc-teal-2 !important; background: transparent !important; }
+}
+.vcc-points-icon { color: @vcc-teal; margin-right: 3px; }
+
+// ── Hero Section ───────────────────────────────────────────
+.vcc-hero {
+  background: linear-gradient(135deg, @vcc-navy 0%, @vcc-navy-2 40%, #1a1040 100%);
+  padding: 80px 40px 60px;
+  margin: -20px -15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  min-height: 460px;
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(123,102,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 50px 20px 40px;
+    text-align: center;
+  }
+}
+
+.vcc-hero-content { flex: 1; max-width: 580px; }
+
+.vcc-hero-badge {
+  display: inline-block;
+  background: rgba(123,102,255,0.15);
+  border: 1px solid rgba(123,102,255,0.35);
+  color: @vcc-purple-2;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  letter-spacing: 0.3px;
+}
+
+.vcc-hero-title {
+  font-size: 52px !important;
+  font-weight: 800 !important;
+  color: @vcc-white !important;
+  line-height: 1.1 !important;
+  margin: 0 0 20px !important;
+  padding: 0 !important;
+  letter-spacing: -1px;
+
+  @media (max-width: 992px) { font-size: 38px !important; }
+  @media (max-width: 768px) { font-size: 30px !important; }
+}
+.vcc-hero-title-accent {
+  background: linear-gradient(90deg, @vcc-purple, @vcc-teal);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vcc-hero-subtitle {
+  font-size: 18px !important;
+  color: @vcc-text-muted !important;
+  line-height: 1.6 !important;
+  margin: 0 0 36px !important;
+  padding: 0 !important;
+  max-width: 500px;
+  @media (max-width: 768px) { font-size: 15px !important; }
+}
+
+.vcc-hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  @media (max-width: 768px) { justify-content: center; }
+}
+
+.vcc-hero-code {
+  flex: 0 0 360px;
+  @media (max-width: 992px) { flex: 0 0 280px; }
+  @media (max-width: 768px) { display: none; }
+}
+
+.vcc-code-preview {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid @vcc-border;
+  border-radius: 14px;
+  padding: 24px 28px;
+  font-family: 'Source Code Pro', 'Ubuntu Mono', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  color: @vcc-text-muted;
+  margin: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+
+  code { background: none !important; color: inherit; padding: 0; }
+  .vcc-kw    { color: #c792ea; }
+  .vcc-prop  { color: #82aaff; }
+  .vcc-str   { color: #c3e88d; }
+  .vcc-num   { color: #f78c6c; }
+}
+
+// ── Buttons ────────────────────────────────────────────────
+.vcc-btn-primary {
+  background: linear-gradient(135deg, @vcc-purple 0%, #5a45d0 100%) !important;
+  color: @vcc-white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease !important;
+  box-shadow: 0 4px 15px rgba(123,102,255,0.35) !important;
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(123,102,255,0.5) !important;
+    color: @vcc-white !important;
+    background: linear-gradient(135deg, @vcc-purple-2 0%, @vcc-purple 100%) !important;
+  }
+}
+.vcc-btn-ghost {
+  background: transparent !important;
+  color: @vcc-text !important;
+  border: 1px solid @vcc-border !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  transition: border-color 0.2s, color 0.2s !important;
+  &:hover {
+    border-color: @vcc-purple !important;
+    color: @vcc-purple-2 !important;
+    background: rgba(123,102,255,0.06) !important;
+  }
+}
+.vcc-btn-lg { padding: 13px 28px !important; }
+.vcc-btn-xl { padding: 16px 40px !important; font-size: 17px !important; }
+
+// ── Stats Bar ──────────────────────────────────────────────
+.vcc-stats-bar {
+  background: @vcc-navy-2;
+  border-bottom: 1px solid @vcc-border;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 40px;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+.vcc-stats-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 48px;
+  @media (max-width: 768px) { padding: 10px 24px; }
+}
+.vcc-stat-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: @vcc-white;
+  line-height: 1;
+  background: linear-gradient(90deg, @vcc-purple, @vcc-teal);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.vcc-stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: @vcc-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 4px;
+}
+.vcc-stats-divider {
+  width: 1px;
+  height: 40px;
+  background: @vcc-border;
+  @media (max-width: 768px) { display: none; }
+}
+
+// ── Sections ───────────────────────────────────────────────
+.vcc-section {
+  padding: 70px 40px;
+  background: #0d0f1a;
+  margin: 0 -15px;
+  @media (max-width: 768px) { padding: 50px 20px; }
+}
+.vcc-section-dark {
+  background: @vcc-navy-2;
+  border-top: 1px solid @vcc-border;
+  border-bottom: 1px solid @vcc-border;
+}
+.vcc-section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.vcc-section-title {
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: @vcc-white !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  letter-spacing: -0.5px;
+  @media (max-width: 768px) { font-size: 26px !important; }
+}
+.vcc-section-subtitle {
+  font-size: 16px !important;
+  color: @vcc-text-muted !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// ── Course Cards Grid ─────────────────────────────────────
+.vcc-course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vcc-course-card {
+  background: @vcc-card-bg;
+  border: 1px solid @vcc-border;
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    border-color: @vcc-purple;
+  }
+
+  &.vcc-card-featured {
+    border-color: @vcc-purple;
+    box-shadow: 0 0 0 1px @vcc-purple, 0 8px 30px rgba(123,102,255,0.2);
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, @vcc-purple, @vcc-teal);
+    }
+  }
+}
+
+.vcc-course-icon {
+  font-size: 32px;
+  margin-bottom: 14px;
+  display: block;
+  line-height: 1;
+}
+.vcc-icon-orange { color: #ff9500; }
+.vcc-icon-yellow { color: #ffcc00; }
+.vcc-icon-blue   { color: #4da8ff; }
+.vcc-icon-purple { color: @vcc-purple-2; }
+.vcc-icon-teal   { color: @vcc-teal; }
+.vcc-icon-red    { color: #ff6b6b; }
+.vcc-icon-green  { color: #4caf82; }
+.vcc-icon-pink   { color: #f06292; }
+
+.vcc-course-meta { margin-bottom: 8px; }
+.vcc-course-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: @vcc-text-muted;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vcc-badge-hot {
+  color: #ff9500 !important;
+  background: rgba(255,149,0,0.12) !important;
+}
+
+.vcc-course-name {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: @vcc-white !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.vcc-course-desc {
+  font-size: 13px !important;
+  color: @vcc-text-muted !important;
+  line-height: 1.6 !important;
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+}
+
+.vcc-course-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid @vcc-border;
+  padding-top: 14px;
+  margin-top: auto;
+}
+.vcc-course-time {
+  font-size: 12px;
+  color: @vcc-text-muted;
+  font-weight: 500;
+}
+.vcc-course-link {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: @vcc-purple-2 !important;
+  text-decoration: none !important;
+  &:hover { color: @vcc-teal !important; text-decoration: none !important; }
+}
+
+// ── How It Works ──────────────────────────────────────────
+.vcc-how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.vcc-how-step {
+  text-align: center;
+  padding: 10px;
+}
+.vcc-how-number {
+  font-size: 48px;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 2px @vcc-purple;
+  line-height: 1;
+  margin-bottom: 14px;
+  font-family: 'Inter', sans-serif;
+}
+.vcc-how-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: @vcc-white !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+}
+.vcc-how-desc {
+  font-size: 14px !important;
+  color: @vcc-text-muted !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// ── Skills Grid ──────────────────────────────────────────
+.vcc-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.vcc-skill-pill {
+  background: @vcc-card-bg;
+  border: 1px solid @vcc-border;
+  color: @vcc-text !important;
+  border-radius: 30px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  &:before { margin-right: 6px; }
+  &:hover {
+    border-color: @vcc-purple;
+    color: @vcc-purple-2 !important;
+    background: rgba(123,102,255,0.08);
+  }
+}
+
+// ── CTA Section ──────────────────────────────────────────
+.vcc-cta-section {
+  background: linear-gradient(135deg, #1a0f35 0%, @vcc-navy-3 50%, #0a1a30 100%);
+  padding: 80px 40px;
+  text-align: center;
+  margin: 0 -15px;
+  border-top: 1px solid @vcc-border;
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(123,102,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+.vcc-cta-title {
+  font-size: 40px !important;
+  font-weight: 800 !important;
+  color: @vcc-white !important;
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+  letter-spacing: -0.5px;
+  @media (max-width: 768px) { font-size: 28px !important; }
+}
+.vcc-cta-sub {
+  font-size: 16px !important;
+  color: @vcc-text-muted !important;
+  margin: 0 0 36px !important;
+  padding: 0 !important;
+}
+
+// ── Map / Curriculum Header ──────────────────────────────
+.vcc-map-header {
+  background: @vcc-navy !important;
+  border-bottom: 1px solid @vcc-border !important;
+  padding-top: 12px !important;
+}
+.vcc-map-brand {
+  font-size: 15px;
+  font-weight: 700;
+  color: @vcc-purple-2;
+  letter-spacing: 0.3px;
+  padding: 6px 0 2px;
+}
+.vcc-map-hint {
+  font-size: 13px !important;
+  color: @vcc-text-muted !important;
+  margin: 4px 0 10px !important;
+}
+.vcc-btn-map {
+  background: @vcc-card-bg !important;
+  color: @vcc-text !important;
+  border: 1px solid @vcc-border !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 7px 18px !important;
+  transition: border-color 0.2s, color 0.2s !important;
+  &:hover, &.active {
+    border-color: @vcc-purple !important;
+    color: @vcc-purple-2 !important;
+    background: rgba(123,102,255,0.08) !important;
+  }
+}
+.vcc-search-group {
+  .vcc-map-search {
+    background: @vcc-card-bg !important;
+    border-color: @vcc-border !important;
+    color: @vcc-text !important;
+    font-size: 14px !important;
+    border-radius: 8px 0 0 8px !important;
+    &::placeholder { color: @vcc-text-muted; }
+    &:focus {
+      border-color: @vcc-purple !important;
+      box-shadow: 0 0 0 2px rgba(123,102,255,0.2) !important;
+    }
+  }
+  .vcc-search-addon {
+    background: @vcc-card-bg !important;
+    border-color: @vcc-border !important;
+    color: @vcc-text-muted !important;
+    border-radius: 0 8px 8px 0 !important;
+    &.filled {
+      background: @vcc-purple !important;
+      color: @vcc-white !important;
+      border-color: @vcc-purple !important;
+      cursor: pointer;
+    }
+  }
+}
+.vcc-map-hr {
+  border-color: @vcc-border !important;
+  margin: 14px 0 !important;
+}
+
+// ── Map Accordion — Vonix Skin ────────────────────────────
+.map-accordion {
+  h2 > a {
+    background: @vcc-card-bg !important;
+    color: @vcc-text !important;
+    border-left: 3px solid @vcc-purple;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    border-radius: 0 8px 8px 0;
+    transition: background 0.2s, color 0.2s;
+    &:hover { background: @vcc-navy-3 !important; color: @vcc-purple-2 !important; }
+  }
+  h3 > a {
+    color: @vcc-text !important;
+    font-size: 14px !important;
+    &:hover { color: @vcc-purple-2 !important; }
+  }
+  a:focus { color: @vcc-purple-2; }
+  .challenge-title a {
+    color: @vcc-text !important;
+    &:hover { color: @vcc-teal !important; }
+  }
+  span.no-link-underline { color: @vcc-text-muted !important; }
+}
+
+.challengeBlockTime {
+  color: @vcc-text-muted !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+#noneFound {
+  color: @vcc-text-muted !important;
+  font-size: 22px !important;
+}
+
+// ── Override Bootstrap background for Vonix pages ─────────
+body {
+  background-color: @vcc-navy !important;
+  color: @vcc-text !important;
+}
+body.top-and-bottom-margins {
+  padding-top: 60px;
+}
+
+// ── Override landing-heading for backward compat ──────────
+.landing-heading { display: none !important; }
+
+// ── footer / wrapper cleanup ──────────────────────────────
+.container {
+  background: transparent !important;
+}
+
+a { color: @vcc-purple-2 !important; }
+a:hover { color: @vcc-teal !important; }
+
+hr {
+  border-color: @vcc-border !important;
+  background-image: none !important;
+  background-color: @vcc-border !important;
+  height: 1px !important;
+}
+
+// Ensure map accordion items have proper background in dark mode
+.map-collapse, .certBlock, .chapterBlock {
+  background: transparent !important;
+}
+.map-fixed-header {
+  background: @vcc-navy !important;
+}
+
+// ── Alert / flash override ────────────────────────────────
+.alert {
+  background: @vcc-card-bg !important;
+  border-color: @vcc-border !important;
+  color: @vcc-text !important;
+  border-radius: 8px !important;
+}
+.alert-info { border-left: 3px solid @vcc-purple !important; }
+.alert-success { border-left: 3px solid @vcc-teal !important; }
+.alert-danger { border-left: 3px solid #ff6b6b !important; }
+
+// ============================================================
+//  VONIX AI TUTOR WIDGET
+// ============================================================
+
+// ── Trigger button ─────────────────────────────────────────
+#vcc-ai-root {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: 'Inter', sans-serif;
+}
+
+#vcc-ai-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+  color: @vcc-white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(123,102,255,0.5);
+  transition: transform 0.2s, box-shadow 0.2s, border-radius 0.2s;
+  outline: none;
+  white-space: nowrap;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(123,102,255,0.65);
+  }
+  &.vcc-ai-trigger-open {
+    border-radius: 50%;
+    padding: 12px;
+    .vcc-ai-trigger-label { display: none; }
+  }
+}
+.vcc-ai-trigger-icon { font-size: 16px; }
+.vcc-ai-trigger-label { font-size: 13px; }
+
+// ── Panel ──────────────────────────────────────────────────
+#vcc-ai-panel {
+  position: fixed;
+  bottom: 88px;
+  right: 24px;
+  width: 420px;
+  max-height: 640px;
+  background: @vcc-navy-2;
+  border: 1px solid @vcc-border;
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(123,102,255,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.2s, transform 0.2s;
+  transform-origin: bottom right;
+
+  &.vcc-ai-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95) translateY(8px);
+  }
+  &.vcc-ai-open {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1) translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 16px);
+    right: 8px;
+    bottom: 80px;
+    max-height: 75vh;
+  }
+}
+
+// ── Header ─────────────────────────────────────────────────
+.vcc-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid @vcc-border;
+  background: linear-gradient(90deg, rgba(123,102,255,0.08), transparent);
+  flex-shrink: 0;
+}
+.vcc-ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vcc-ai-logo {
+  color: @vcc-purple;
+  font-size: 16px;
+}
+.vcc-ai-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: @vcc-white;
+  letter-spacing: -0.2px;
+}
+.vcc-ai-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vcc-ai-icon-btn {
+  background: transparent;
+  border: none;
+  color: @vcc-text-muted;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+  &:hover { color: @vcc-white; background: rgba(255,255,255,0.07); }
+  &.vcc-ai-btn-active {
+    color: @vcc-purple-2;
+    background: rgba(123,102,255,0.14);
+  }
+}
+
+// ── Status bar ─────────────────────────────────────────────
+.vcc-ai-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid @vcc-border;
+  flex-shrink: 0;
+}
+.vcc-ai-ctx-text {
+  font-size: 11px;
+  color: @vcc-text-muted;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+}
+.vcc-ai-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: @vcc-purple-2;
+  background: rgba(123,102,255,0.14);
+  border: 1px solid rgba(123,102,255,0.3);
+  border-radius: 12px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  &.vcc-ai-hidden { display: none; }
+}
+
+// ── Messages area ──────────────────────────────────────────
+#vcc-ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar       { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: @vcc-border; border-radius: 4px; }
+}
+
+.vcc-ai-welcome {
+  text-align: center;
+  padding: 24px 16px;
+  opacity: 0.85;
+}
+.vcc-ai-welcome-title {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: @vcc-white !important;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+}
+.vcc-ai-welcome-sub {
+  font-size: 13px !important;
+  color: @vcc-text-muted !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// Message bubbles
+.vcc-ai-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 100%;
+  animation: vccMsgIn 0.2s ease;
+}
+@keyframes vccMsgIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.vcc-ai-msg-user {
+  justify-content: flex-end;
+  .vcc-ai-msg-body {
+    background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+    color: @vcc-white;
+    border-radius: 16px 16px 4px 16px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 85%;
+    word-break: break-word;
+  }
+}
+
+.vcc-ai-msg-assistant {
+  justify-content: flex-start;
+  align-items: flex-start;
+  .vcc-ai-msg-icon {
+    color: @vcc-purple;
+    font-size: 14px;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  .vcc-ai-msg-body {
+    background: @vcc-card-bg;
+    border: 1px solid @vcc-border;
+    color: @vcc-text;
+    border-radius: 4px 16px 16px 16px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: calc(100% - 30px);
+    word-break: break-word;
+  }
+  &.vcc-ai-streaming .vcc-ai-msg-body {
+    border-color: rgba(123,102,255,0.4);
+    box-shadow: 0 0 0 1px rgba(123,102,255,0.15);
+  }
+}
+
+.vcc-ai-msg-error .vcc-ai-msg-body {
+  background: rgba(255,107,107,0.1);
+  border: 1px solid rgba(255,107,107,0.4);
+  color: #ff9b9b;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+// Markdown rendered inside assistant messages
+.vcc-ai-msg-body {
+  p.vcc-ai-p   { margin: 0 0 8px; padding: 0; font-size: inherit; color: inherit; }
+  h3.vcc-ai-h, h4.vcc-ai-h {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: @vcc-white !important;
+    margin: 10px 0 4px !important;
+    padding: 0 !important;
+  }
+  ul.vcc-ai-ul  { padding-left: 16px; margin: 4px 0 8px; }
+  li           { color: @vcc-text; font-size: 13px; margin-bottom: 4px; }
+  strong       { color: @vcc-white; font-weight: 700; }
+  em           { color: @vcc-purple-2; }
+  code.vcc-ai-inline {
+    background: rgba(123,102,255,0.15);
+    color: @vcc-teal;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+  }
+}
+
+// Code blocks
+.vcc-ai-code-block {
+  background: @vcc-navy;
+  border: 1px solid @vcc-border;
+  border-radius: 8px;
+  margin: 8px 0;
+  overflow: hidden;
+  position: relative;
+  pre {
+    margin: 0;
+    padding: 12px 14px;
+    overflow-x: auto;
+    background: transparent;
+    border: none;
+    code {
+      font-family: 'Source Code Pro', monospace !important;
+      font-size: 12px !important;
+      color: #abb2bf !important;
+      background: none !important;
+      padding: 0 !important;
+      white-space: pre;
+    }
+  }
+}
+.vcc-ai-code-lang {
+  font-size: 10px;
+  font-weight: 700;
+  color: @vcc-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 6px 14px 4px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid @vcc-border;
+}
+.vcc-ai-copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: rgba(123,102,255,0.2);
+  border: 1px solid rgba(123,102,255,0.35);
+  color: @vcc-purple-2;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s, color 0.15s;
+  &:hover { background: @vcc-purple; color: @vcc-white; }
+}
+
+// Typing indicator
+#vcc-ai-typing {
+  padding: 0 16px 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+  &.vcc-ai-hidden { display: none; }
+}
+.vcc-ai-typing-dot {
+  width: 7px;
+  height: 7px;
+  background: @vcc-purple;
+  border-radius: 50%;
+  animation: vccTypingDot 1.2s infinite;
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+@keyframes vccTypingDot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1; }
+}
+
+// ── Input area ─────────────────────────────────────────────
+.vcc-ai-input-area {
+  border-top: 1px solid @vcc-border;
+  padding: 10px 12px;
+  flex-shrink: 0;
+  background: rgba(0,0,0,0.15);
+}
+.vcc-ai-model-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vcc-ai-select {
+  flex: 1;
+  background: @vcc-card-bg;
+  border: 1px solid @vcc-border;
+  color: @vcc-text;
+  border-radius: 7px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  cursor: pointer;
+  &:focus { border-color: @vcc-purple; }
+  option, optgroup { background: @vcc-navy-2; color: @vcc-text; }
+}
+#vcc-ai-stream-indicator {
+  font-size: 11px;
+  color: @vcc-teal;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: vccPulse 1s infinite alternate;
+  &.vcc-ai-hidden { display: none; }
+}
+@keyframes vccPulse {
+  from { opacity: 0.5; }
+  to   { opacity: 1; }
+}
+.vcc-ai-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+#vcc-ai-input {
+  flex: 1;
+  background: @vcc-card-bg;
+  border: 1px solid @vcc-border;
+  color: @vcc-text;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  resize: none;
+  outline: none;
+  min-height: 38px;
+  max-height: 120px;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+  &::placeholder { color: @vcc-text-muted; }
+  &:focus { border-color: @vcc-purple; box-shadow: 0 0 0 2px rgba(123,102,255,0.18); }
+}
+#vcc-ai-send-btn {
+  background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+  border: none;
+  color: @vcc-white;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(123,102,255,0.4);
+  &:hover:not(:disabled) { transform: scale(1.08); box-shadow: 0 4px 12px rgba(123,102,255,0.6); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// ── Settings panel ─────────────────────────────────────────
+#vcc-ai-settings-panel {
+  position: absolute;
+  inset: 0;
+  background: @vcc-navy-2;
+  border-radius: 18px;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  &.vcc-ai-hidden { display: none; }
+}
+.vcc-ai-settings-title {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: @vcc-white !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+}
+.vcc-ai-setting-group { display: flex; flex-direction: column; gap: 5px; }
+.vcc-ai-setting-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: @vcc-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.vcc-ai-setting-input {
+  background: @vcc-card-bg;
+  border: 1px solid @vcc-border;
+  color: @vcc-text;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  &:focus { border-color: @vcc-purple; }
+  &::placeholder { color: @vcc-text-muted; }
+}
+.vcc-ai-setting-hint {
+  font-size: 11px !important;
+  color: @vcc-text-muted !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4 !important;
+}
+.vcc-ai-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Toggle switch
+.vcc-ai-toggle {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    &:checked + .vcc-ai-toggle-slider { background: @vcc-purple; }
+    &:checked + .vcc-ai-toggle-slider:before { transform: translateX(18px); }
+  }
+}
+.vcc-ai-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: @vcc-border;
+  border-radius: 22px;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: @vcc-white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+}
+.vcc-ai-settings-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.vcc-ai-btn-save {
+  flex: 1;
+  background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+  color: @vcc-white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.15s;
+  &:hover { opacity: 0.9; }
+}
+.vcc-ai-btn-danger {
+  background: rgba(255,107,107,0.1);
+  color: #ff9b9b;
+  border: 1px solid rgba(255,107,107,0.3);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+  &:hover { background: rgba(255,107,107,0.2); }
+}
+
+// ── Hidden utility ──────────────────────────────────────────
+.vcc-ai-hidden { display: none !important; }
+
+// ============================================================
+//  AUTH PAGES (signup / signin)
+// ============================================================
+.vcc-auth-wrap {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+.vcc-auth-box {
+  background: @vcc-navy-2;
+  border: 1px solid @vcc-border;
+  border-radius: 18px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  text-align: center;
+}
+.vcc-auth-logo {
+  font-size: 28px;
+  color: @vcc-purple;
+  margin-bottom: 14px;
+  display: block;
+}
+.vcc-auth-title {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: @vcc-white !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  letter-spacing: -0.3px;
+}
+.vcc-auth-sub {
+  font-size: 14px !important;
+  color: @vcc-text-muted !important;
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+}
+.vcc-auth-form { text-align: left; }
+.vcc-auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+.vcc-auth-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: @vcc-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.vcc-auth-input {
+  background: @vcc-card-bg !important;
+  border: 1px solid @vcc-border !important;
+  color: @vcc-white !important;
+  border-radius: 9px !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  font-family: 'Inter', sans-serif !important;
+  outline: none !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  transition: border-color 0.2s !important;
+  &::placeholder { color: @vcc-text-muted !important; }
+  &:focus {
+    border-color: @vcc-purple !important;
+    box-shadow: 0 0 0 3px rgba(123,102,255,0.18) !important;
+  }
+}
+.vcc-auth-btn {
+  width: 100%;
+  background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+  color: @vcc-white !important;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  margin-top: 8px;
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(123,102,255,0.4);
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  &:hover { opacity: 0.9; transform: translateY(-1px); color: @vcc-white !important; }
+}
+.vcc-auth-links {
+  text-align: center;
+  margin-top: 12px;
+  a { font-size: 13px; color: @vcc-purple-2; text-decoration: none; &:hover { text-decoration: underline; } }
+}
+.vcc-auth-switch {
+  font-size: 13px !important;
+  color: @vcc-text-muted !important;
+  text-align: center;
+  margin-top: 20px !important;
+  padding: 0 !important;
+  a { color: @vcc-purple-2; text-decoration: none; &:hover { text-decoration: underline; } }
+}
+// Main signin page (two options)
+.vcc-auth-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.vcc-auth-option-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, @vcc-purple, #5a45d0);
+  color: @vcc-white !important;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(123,102,255,0.35);
+  &:hover { opacity: 0.9; transform: translateY(-1px); color: @vcc-white !important; }
+  &.vcc-auth-option-secondary {
+    background: @vcc-card-bg;
+    border: 1px solid @vcc-border;
+    color: @vcc-text !important;
+    box-shadow: none;
+    &:hover { border-color: @vcc-purple; color: @vcc-white !important; }
+  }
+  &.vcc-auth-option-github {
+    background: #24292e;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: none;
+    color: @vcc-white !important;
+    &:hover { background: #333d45; }
+  }
+}
+.vcc-auth-option-icon { font-size: 16px; line-height: 1; }
+.vcc-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 16px;
+  &::before, &::after { content: ''; flex: 1; height: 1px; background: @vcc-border; }
+  span { font-size: 12px; color: @vcc-text-muted; white-space: nowrap; }
+}
