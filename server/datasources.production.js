@@ -1,5 +1,6 @@
 // Production datasources — PostgreSQL + SMTP
 // Loaded automatically by LoopBack when NODE_ENV=production
+console.log('>>> datasources.production.js loaded, DATABASE_URL exists:', !!process.env.DATABASE_URL);
 module.exports = {
   db: {
     name: 'db',
