@@ -1,17 +1,10 @@
-// Production datasources — PostgreSQL + SMTP
+// Production datasources — MongoDB + SMTP
 // Loaded automatically by LoopBack when NODE_ENV=production
-console.log('>>> datasources.production.js loaded, DATABASE_URL exists:', !!process.env.DATABASE_URL);
 module.exports = {
   db: {
     name: 'db',
-    connector: 'postgresql',
-    url: process.env.DATABASE_URL || null,
-    host: process.env.PGHOST || '127.0.0.1',
-    port: process.env.PGPORT || 5432,
-    database: process.env.PGDATABASE || 'vonix_code_camp',
-    user: process.env.PGUSER || 'vonix',
-    password: process.env.PGPASSWORD || '',
-    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false
+    connector: 'mongodb',
+    url: process.env.MONGODB || 'mongodb://localhost/vonix_code_camp'
   },
   mail: {
     name: 'mail',
